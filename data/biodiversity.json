@@ -1,0 +1,72 @@
+{
+  "lastUpdated": "2025-06-12",
+  "totalSpecies": 214,
+  "iNaturalistProjectUrl": "https://www.inaturalist.org/projects/rvu-campus-biodiversity",
+  "groups": [
+    {
+      "name": "Birds",
+      "count": 68,
+      "icon": "bird",
+      "highlight": "Indian Pitta sighted near eastern tree belt in Dec 2024",
+      "color": "bg-forest-50 text-forest-700"
+    },
+    {
+      "name": "Butterflies",
+      "count": 41,
+      "icon": "butterfly",
+      "highlight": "Lime Butterfly activity peaked during pre-monsoon bloom",
+      "color": "bg-amber-50 text-amber-700"
+    },
+    {
+      "name": "Reptiles",
+      "count": 17,
+      "icon": "reptile",
+      "highlight": "Common Bronzeback sightings recorded near shrub corridors",
+      "color": "bg-teal-50 text-teal-700"
+    },
+    {
+      "name": "Flora",
+      "count": 88,
+      "icon": "leaf",
+      "highlight": "Native flowering patch restored behind Block C",
+      "color": "bg-violet-50 text-violet-700"
+    }
+  ],
+  "recentObservations": [
+    {
+      "species": "Pitta brachyura",
+      "commonName": "Indian Pitta",
+      "date": "2025-05-31",
+      "observer": "Nivedita Rao",
+      "imageUrl": "https://www.inaturalist.org/photos/placeholder-indian-pitta.jpg"
+    },
+    {
+      "species": "Psittacula krameri",
+      "commonName": "Rose-ringed Parakeet",
+      "date": "2025-05-29",
+      "observer": "Arjun Menon",
+      "imageUrl": null
+    },
+    {
+      "species": "Danaus chrysippus",
+      "commonName": "Plain Tiger",
+      "date": "2025-05-27",
+      "observer": "Dharini N",
+      "imageUrl": null
+    },
+    {
+      "species": "Calotes versicolor",
+      "commonName": "Oriental Garden Lizard",
+      "date": "2025-05-25",
+      "observer": "Karthik Iyer",
+      "imageUrl": null
+    },
+    {
+      "species": "Azadirachta indica",
+      "commonName": "Neem",
+      "date": "2025-05-24",
+      "observer": "Samiksha Pai",
+      "imageUrl": null
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "students": [
+    {
+      "id": "stu-nivedita-rao",
+      "name": "Nivedita Rao",
+      "role": "President",
+      "department": "School of Liberal Arts and Sciences",
+      "year": "3rd Year",
+      "bio": "Nivedita leads TGA's strategic planning and member engagement. She works closely with student volunteers to keep field activities consistent and safe.",
+      "avatar": "NR",
+      "interests": ["Urban birds", "Citizen science", "Community outreach"],
+      "instagram": "nivedita.birds",
+      "email": "nivedita.rao@rvu.edu.in"
+    },
+    {
+      "id": "stu-arjun-menon",
+      "name": "Arjun Menon",
+      "role": "Birdwatching Lead",
+      "department": "School of Computer Science and Engineering",
+      "year": "2nd Year",
+      "bio": "Arjun coordinates weekly birding routes and beginner onboarding. He also supports checklist quality review for GBBC and eBird events.",
+      "avatar": "AM",
+      "interests": ["Raptors", "Field notes", "Acoustic identification"],
+      "instagram": "arjun.on.trails",
+      "email": "arjun.menon@rvu.edu.in"
+    },
+    {
+      "id": "stu-samiksha-pai",
+      "name": "Samiksha Pai",
+      "role": "Campaigns Lead",
+      "department": "School of Business",
+      "year": "3rd Year",
+      "bio": "Samiksha drives TGA's awareness campaigns and partnerships. She designs communication around cleanup drives and sustainability events.",
+      "avatar": "SP",
+      "interests": ["Waste management", "Behavior change", "Sustainability storytelling"],
+      "instagram": "samiksha.green",
+      "email": "samiksha.pai@rvu.edu.in"
+    },
+    {
+      "id": "stu-dharini-n",
+      "name": "Dharini N",
+      "role": "Biodiversity Assessment Coordinator",
+      "department": "School of Liberal Arts and Sciences",
+      "year": "2nd Year",
+      "bio": "Dharini maintains species logs and observation workflows for the campus assessment. She helps volunteers use iNaturalist for clean and useful submissions.",
+      "avatar": "DN",
+      "interests": ["Butterflies", "Flora mapping", "iNaturalist workflows"],
+      "instagram": "dharini.ecology",
+      "email": "dharini.n@rvu.edu.in"
+    },
+    {
+      "id": "stu-karthik-iyer",
+      "name": "Karthik Iyer",
+      "role": "Events Operations",
+      "department": "School of Design and Innovation",
+      "year": "1st Year",
+      "bio": "Karthik supports logistics, volunteer coordination, and on-ground execution during field events. He focuses on participant safety and smooth event flow.",
+      "avatar": "KI",
+      "interests": ["Event operations", "Nature photography", "Trail planning"],
+      "instagram": null,
+      "email": "karthik.iyer@rvu.edu.in"
+    }
+  ],
+  "faculty": [
+    {
+      "id": "fac-dr-meera-joshi",
+      "name": "Dr. Meera Joshi",
+      "role": "Faculty Advisor",
+      "department": "School of Liberal Arts and Sciences",
+      "year": null,
+      "bio": "Dr. Joshi mentors TGA's ecological initiatives and supports research alignment across student projects. Her guidance helps bridge field activity with academic rigor.",
+      "avatar": "MJ",
+      "interests": ["Urban ecology", "Conservation education", "Field methodology"],
+      "instagram": null,
+      "email": "meera.joshi@rvu.edu.in"
+    },
+    {
+      "id": "fac-dr-raghav-hegde",
+      "name": "Dr. Raghav Hegde",
+      "role": "Faculty Co-advisor",
+      "department": "School of Computer Science and Engineering",
+      "year": null,
+      "bio": "Dr. Hegde supports data workflows, dashboard planning, and technology integration for biodiversity documentation. He advises students on responsible data handling.",
+      "avatar": "RH",
+      "interests": ["Data systems", "Environmental sensing", "Open science"],
+      "instagram": null,
+      "email": "raghav.hegde@rvu.edu.in"
+    }
+  ]
+}
