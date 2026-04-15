@@ -69,12 +69,12 @@ const Navbar1 = ({
       <nav data-state={menuState && "active"} className="group fixed z-20 w-full px-2">
         <div
           className={cn(
-            "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
+            "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 ease-in-out lg:px-12",
             isScrolled &&
-              "bg-background/55 max-w-5xl rounded-2xl border border-border/80 shadow-lg shadow-black/5 backdrop-blur-xl lg:px-5"
+              "bg-background/50 max-w-4xl rounded-2xl border border-border/80 shadow-lg shadow-black/5 backdrop-blur-lg lg:px-5"
           )}
         >
-          <div className="relative flex flex-wrap items-center justify-between gap-5 py-3 lg:gap-0 lg:py-4">
+          <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 transition-all duration-300 ease-in-out lg:gap-0 lg:py-4">
             <div className="flex w-full justify-between lg:w-auto">
               <Link href="/" aria-label="home" className="flex items-center space-x-2">
                 <Logo />
@@ -85,8 +85,8 @@ const Navbar1 = ({
                 aria-label={menuState ? "Close Menu" : "Open Menu"}
                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
               >
-                <Menu className="m-auto size-6 duration-200 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0" />
-                <X className="absolute inset-0 m-auto size-6 scale-0 opacity-0 duration-200 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100" />
+                <Menu className="m-auto size-6 duration-200 group-data-[state=active]:rotate-180 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0" />
+                <X className="absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200 group-data-[state=active]:rotate-0 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100" />
               </button>
             </div>
 
@@ -214,8 +214,15 @@ const Navbar1 = ({
 const Logo = ({ className }: { className?: string }) => {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative h-8 w-8 overflow-hidden rounded-lg">
-        <Image src="/assets/logo/TGA_Main_Logo.jpeg" alt="The Green Alliance" fill className="object-cover" />
+      <div className="relative h-9 w-30.5 overflow-hidden rounded-md sm:h-10 sm:w-35">
+        <Image
+          src="/assets/logo/TGA_Main_Logo.jpeg"
+          alt="The Green Alliance"
+          fill
+          className="object-contain"
+          sizes="(max-width: 640px) 122px, 140px"
+          priority
+        />
       </div>
       <div className="flex flex-col leading-tight">
         <span className="text-sm font-semibold text-foreground sm:text-base">The Green Alliance</span>

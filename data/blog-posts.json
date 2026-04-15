@@ -1,0 +1,54 @@
+[
+  {
+    "id": "gbbc-lessons-bengaluru-diversity",
+    "slug": "what-gbbc-taught-us-bengaluru-bird-diversity",
+    "title": "What the GBBC taught us about Bengaluru's bird diversity",
+    "excerpt": "Our GBBC weekend showed us how much diversity can exist inside and around a university campus. From early-morning calls to unexpected sightings near built spaces, the count changed how we read everyday landscapes.",
+    "content": "## Why GBBC matters\n\nThe Great Backyard Bird Count gives students a practical way to contribute to citizen science. At TGA, we split into small teams and focused on repeatable observation routes.\n\n## What we observed\n\nWe found that edge habitats near tree clusters and water accumulation points had the highest activity. Several members also noticed how quickly species richness shifted with time of day.\n\n## Takeaways\n\nConsistent observation, responsible field behavior, and better checklist discipline can produce strong local data. GBBC is not just an event for us - it is also a training ground for long-term biodiversity tracking.",
+    "author": "Nivedita Rao",
+    "authorRole": "Birdwatching Lead",
+    "date": "2025-02-20",
+    "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/blog-gbbc.jpg",
+    "tags": ["GBBC", "birdwatching", "citizen-science"],
+    "readingTimeMinutes": 6
+  },
+  {
+    "id": "birdwatching-beginner-guide",
+    "slug": "how-to-start-birdwatching-complete-beginner",
+    "title": "How to start birdwatching as a complete beginner",
+    "excerpt": "Birdwatching can feel overwhelming at first, but it does not need expensive equipment or expert knowledge. A notebook, patience, and a simple routine are enough to begin.",
+    "content": "## Start with habit, not gear\n\nBegin with short 20-minute sessions around the same route. Repetition helps your eyes and ears identify patterns.\n\n## Learn common species first\n\nInstead of chasing rare sightings, focus on common campus birds and their behavior. This builds confidence quickly.\n\n## Keep your notes simple\n\nRecord date, time, location, weather, and one behavior note per species. Over time, this forms a meaningful personal dataset.",
+    "author": "Arjun Menon",
+    "authorRole": "Student Coordinator",
+    "date": "2025-03-04",
+    "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/blog-beginner-birding.jpg",
+    "tags": ["beginner", "field-skills", "campus-birding"],
+    "readingTimeMinutes": 5
+  },
+  {
+    "id": "kengeri-cleanup-reflections",
+    "slug": "our-kengeri-lake-cleanup-what-we-found",
+    "title": "Our Kengeri lake cleanup: what we found and what it means",
+    "excerpt": "The cleanup revealed recurring waste clusters and patterns that are easy to miss in one-time drives. Documenting what we picked up helped us think beyond collection and toward prevention.",
+    "content": "## What showed up most\n\nSingle-use plastics and mixed dry waste dominated shoreline edges. We also observed disposal patterns around access points with heavy foot traffic.\n\n## Why data matters\n\nBy tagging waste categories and areas, we can report clearer findings to civic partners. This helps shape targeted interventions instead of generic campaigns.\n\n## What comes next\n\nTGA plans repeat cleanups paired with awareness sessions for students and nearby communities.",
+    "author": "Samiksha Pai",
+    "authorRole": "Campaigns Lead",
+    "date": "2025-04-09",
+    "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/blog-kengeri.jpg",
+    "tags": ["cleanup", "community", "waste-audit"],
+    "readingTimeMinutes": 7
+  },
+  {
+    "id": "campus-68-bird-species",
+    "slug": "meet-the-68-bird-species-on-our-campus",
+    "title": "Meet the 68 bird species living on our campus",
+    "excerpt": "Our campus checklist crossed 68 bird species, including residents and seasonal visitors. The list highlights how even fragmented green spaces can support rich urban biodiversity.",
+    "content": "## Building the checklist\n\nThe list was compiled through repeated campus walks, validated observations, and community review among TGA members.\n\n## Surprising patterns\n\nSpecies presence shifted strongly between early mornings and late afternoons. Areas with layered vegetation consistently performed better than open lawns.\n\n## Why this matters for RVU\n\nThe checklist supports evidence-based campus greening decisions and creates opportunities for student-led ecological monitoring.",
+    "author": "Dharini N",
+    "authorRole": "Biodiversity Assessment Coordinator",
+    "date": "2025-05-18",
+    "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/blog-campus-species.jpg",
+    "tags": ["biodiversity", "campus", "species-list"],
+    "readingTimeMinutes": 8
+  }
+]

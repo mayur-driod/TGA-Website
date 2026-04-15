@@ -1,9 +1,21 @@
-import { Navbar1 } from "@/components/ui/navbar"
+import HeroSection from "@/components/sections/HeroSection"
+import StatsBar from "@/components/sections/StatsBar"
+import ActivitiesGrid from "@/components/sections/ActivitiesGrid"
+import EventsPreview from "@/components/sections/EventsPreview"
+import BiodiversityPreview from "@/components/sections/BiodiversityPreview"
+import PartnersBar from "@/components/sections/PartnersBar"
+import JoinSection from "@/components/sections/JoinSection"
 
 export default function PublicHomePage() {
 	return (
-		<main className="min-h-screen bg-background">
-			<Navbar1 isLoggedIn />
-		</main>
+		<>
+			<HeroSection />
+			<StatsBar />
+			<ActivitiesGrid />
+			<EventsPreview />
+			<BiodiversityPreview />
+			<PartnersBar />
+			<JoinSection />
+		</>
 	)
 }
