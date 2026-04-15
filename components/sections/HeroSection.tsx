@@ -103,32 +103,32 @@ const HERO_LOCATIONS: HeroLocation[] = [
 
 const ORBIT_BADGES: OrbitBadge[] = [
   {
-    xClass: "sm:left-6 md:left-8",
-    yClass: "sm:top-10 md:top-12",
+    xClass: "left-2 sm:left-6 md:left-8",
+    yClass: "top-7 sm:top-10 md:top-12",
     duration: 5.2,
     delay: 0,
     rotate: -12,
     icon: Bird,
   },
   {
-    xClass: "sm:right-6 md:right-10",
-    yClass: "sm:top-16 md:top-20",
+    xClass: "right-2 sm:right-6 md:right-10",
+    yClass: "top-11 sm:top-16 md:top-20",
     duration: 4.8,
     delay: 0.5,
     rotate: 14,
     icon: Camera,
   },
   {
-    xClass: "sm:left-8 md:left-12",
-    yClass: "sm:bottom-12 md:bottom-16",
+    xClass: "left-3 sm:left-8 md:left-12",
+    yClass: "bottom-10 sm:bottom-12 md:bottom-16",
     duration: 5.6,
     delay: 0.9,
     rotate: 8,
     icon: Recycle,
   },
   {
-    xClass: "sm:right-8 md:right-12",
-    yClass: "sm:bottom-16 md:bottom-20",
+    xClass: "right-3 sm:right-8 md:right-12",
+    yClass: "bottom-12 sm:bottom-16 md:bottom-20",
     duration: 5,
     delay: 0.3,
     rotate: -7,
@@ -152,7 +152,8 @@ Globe.displayName = "Globe"
 
 function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
   const globeRef = useRef<GlobeMethods | null>(null)
-  const [globeSize, setGlobeSize] = useState(420)
+  const globeContainerRef = useRef<HTMLDivElement | null>(null)
+  const [globeSize, setGlobeSize] = useState(320)
   const [activeLocation, setActiveLocation] = useState<HeroLocation>(HERO_LOCATIONS[0])
   const [landPolygons, setLandPolygons] = useState<LandPolygonDatum[]>([])
 
@@ -252,34 +253,27 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
   }, [])
 
   useEffect(() => {
-    const setSize = () => {
-      if (window.innerWidth < 480) {
-        setGlobeSize(300)
-        return
-      }
-
-      if (window.innerWidth < 640) {
-        setGlobeSize(330)
-        return
-      }
-
-      if (window.innerWidth < 768) {
-        setGlobeSize(360)
-        return
-      }
-
-      if (window.innerWidth < 1024) {
-        setGlobeSize(390)
-        return
-      }
-
-      setGlobeSize(420)
+    const updateSize = () => {
+      const containerWidth = globeContainerRef.current?.clientWidth ?? window.innerWidth
+      const horizontalAllowance = window.innerWidth < 640 ? 30 : 16
+      const nextSize = Math.min(420, Math.max(220, containerWidth - horizontalAllowance))
+      setGlobeSize(Math.round(nextSize))
     }
 
-    setSize()
-    window.addEventListener("resize", setSize)
+    updateSize()
 
-    return () => window.removeEventListener("resize", setSize)
+    const resizeObserver = new ResizeObserver(updateSize)
+    const container = globeContainerRef.current
+    if (container) {
+      resizeObserver.observe(container)
+    }
+
+    window.addEventListener("resize", updateSize)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener("resize", updateSize)
+    }
   }, [])
 
   const configureGlobe = useCallback(() => {
@@ -304,103 +298,105 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
   }, [globeSize, configureGlobe])
 
   return (
-    <div className="relative mx-auto flex h-75 w-75 items-center justify-center sm:h-90 sm:w-90 md:h-97.5 md:w-97.5 lg:h-107.5 lg:w-107.5">
-      <div className="pointer-events-none absolute h-[82%] w-[82%] rounded-full border border-primary/25" />
-      <div className="pointer-events-none absolute h-[74%] w-[74%] rounded-full bg-primary/10 blur-2xl" />
+    <div ref={globeContainerRef} className="mx-auto w-full max-w-105">
+      <div className="relative mx-auto flex shrink-0 items-center justify-center" style={{ width: globeSize, height: globeSize }}>
+        <div className="pointer-events-none absolute h-[82%] w-[82%] rounded-full border border-primary/25" />
+        <div className="pointer-events-none absolute h-[74%] w-[74%] rounded-full bg-primary/10 blur-2xl" />
 
-      <div className="relative overflow-hidden rounded-full border border-primary/20 shadow-2xl">
-        <Globe
-          ref={globeRef}
-          onGlobeReady={configureGlobe}
-          width={globeSize}
-          height={globeSize}
-          backgroundColor="rgba(0,0,0,0)"
-          globeImageUrl={oceanTextureUrl || undefined}
-          bumpImageUrl={null}
-          showAtmosphere
-          atmosphereColor="#BDE5AD"
-          atmosphereAltitude={0.18}
-          polygonsData={landPolygons}
-          polygonCapColor={() => "#8FC857"}
-          polygonSideColor={() => "rgba(111,167,62,0.88)"}
-          polygonStrokeColor={() => "#5F9D31"}
-          polygonAltitude={0.01}
-          polygonCapCurvatureResolution={3}
-          polygonsTransitionDuration={0}
-          pointsData={HERO_LOCATIONS}
-          pointLat="lat"
-          pointLng="lng"
-          pointColor="color"
-          pointRadius="radius"
-          pointAltitude={0}
-          pointResolution={18}
-          pointLabel={(point) => {
-            const location = point as HeroLocation
-            return `${location.name}<br/>${location.subtitle}`
-          }}
-          onPointHover={(point) => setActiveLocation((point as HeroLocation | null) ?? HERO_LOCATIONS[0])}
-          ringsData={rings}
-          ringLat="lat"
-          ringLng="lng"
-          ringColor="color"
-          ringMaxRadius="maxR"
-          ringPropagationSpeed="propagationSpeed"
-          ringRepeatPeriod="repeatPeriod"
-        />
-      </div>
-
-      {ORBIT_BADGES.map((orbit, index) => {
-        const OrbitIcon = orbit.icon
-
-        return (
-          <motion.div
-            key={`${orbit.xClass}-${orbit.yClass}`}
-            className={`pointer-events-none absolute hidden ${orbit.xClass} ${orbit.yClass} rounded-full border border-primary/20 bg-background/70 p-1.5 text-primary shadow-sm backdrop-blur-sm sm:flex`}
-            style={{ rotate: orbit.rotate }}
-            animate={
-              shouldReduceMotion
-                ? undefined
-                : {
-                    x: [0, index % 2 === 0 ? 12 : -12, 0],
-                    y: [0, -8, 0],
-                  }
-            }
-            transition={{
-              repeat: Number.POSITIVE_INFINITY,
-              duration: orbit.duration,
-              delay: orbit.delay,
-              ease: "easeInOut",
+        <div className="relative overflow-hidden rounded-full border border-primary/20 shadow-2xl">
+          <Globe
+            ref={globeRef}
+            onGlobeReady={configureGlobe}
+            width={globeSize}
+            height={globeSize}
+            backgroundColor="rgba(0,0,0,0)"
+            globeImageUrl={oceanTextureUrl || undefined}
+            bumpImageUrl={null}
+            showAtmosphere
+            atmosphereColor="#BDE5AD"
+            atmosphereAltitude={0.18}
+            polygonsData={landPolygons}
+            polygonCapColor={() => "#8FC857"}
+            polygonSideColor={() => "rgba(111,167,62,0.88)"}
+            polygonStrokeColor={() => "#5F9D31"}
+            polygonAltitude={0.01}
+            polygonCapCurvatureResolution={3}
+            polygonsTransitionDuration={0}
+            pointsData={HERO_LOCATIONS}
+            pointLat="lat"
+            pointLng="lng"
+            pointColor="color"
+            pointRadius="radius"
+            pointAltitude={0}
+            pointResolution={18}
+            pointLabel={(point) => {
+              const location = point as HeroLocation
+              return `${location.name}<br/>${location.subtitle}`
             }}
-          >
-            <OrbitIcon className="h-3.5 w-3.5" />
-          </motion.div>
-        )
-      })}
+            onPointHover={(point) => setActiveLocation((point as HeroLocation | null) ?? HERO_LOCATIONS[0])}
+            ringsData={rings}
+            ringLat="lat"
+            ringLng="lng"
+            ringColor="color"
+            ringMaxRadius="maxR"
+            ringPropagationSpeed="propagationSpeed"
+            ringRepeatPeriod="repeatPeriod"
+          />
+        </div>
 
-      <motion.div
-        className="absolute bottom-2 right-2 max-w-32.5 rounded-2xl border border-primary/20 bg-background/85 px-2 py-1.5 text-[10px] leading-tight text-foreground shadow-sm backdrop-blur-sm sm:right-6 sm:max-w-42.5 sm:px-3 sm:py-2 sm:text-[11px]"
-        animate={shouldReduceMotion ? undefined : { y: [0, -4, 0] }}
-        transition={{ repeat: Number.POSITIVE_INFINITY, duration: 4.2, ease: "easeInOut", delay: 0.2 }}
-      >
-        <p className="font-semibold text-primary">{activeLocation.name}</p>
-        <p className="text-muted-foreground">{activeLocation.subtitle}</p>
-      </motion.div>
+        {ORBIT_BADGES.map((orbit, index) => {
+          const OrbitIcon = orbit.icon
 
-      <motion.div
-        className="absolute right-2 top-10 hidden rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground sm:block"
-        animate={shouldReduceMotion ? undefined : { y: [0, -6, 0] }}
-        transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3.5, ease: "easeInOut" }}
-      >
-        Student-led impact
-      </motion.div>
+          return (
+            <motion.div
+              key={`${orbit.xClass}-${orbit.yClass}`}
+              className={`pointer-events-none absolute flex ${orbit.xClass} ${orbit.yClass} rounded-full border border-primary/20 bg-background/70 p-1 text-primary shadow-sm backdrop-blur-sm sm:p-1.5`}
+              style={{ rotate: orbit.rotate }}
+              animate={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      x: [0, index % 2 === 0 ? 12 : -12, 0],
+                      y: [0, -8, 0],
+                    }
+              }
+              transition={{
+                repeat: Number.POSITIVE_INFINITY,
+                duration: orbit.duration,
+                delay: orbit.delay,
+                ease: "easeInOut",
+              }}
+            >
+              <OrbitIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            </motion.div>
+          )
+        })}
 
-      <motion.div
-        className="absolute bottom-8 left-0 hidden rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground sm:block"
-        animate={shouldReduceMotion ? undefined : { y: [0, 5, 0] }}
-        transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3, ease: "easeInOut", delay: 0.4 }}
-      >
-        Campus biodiversity
-      </motion.div>
+        <motion.div
+          className="absolute bottom-2 left-1/2 max-w-32.5 -translate-x-1/2 rounded-2xl border border-primary/20 bg-background/85 px-2 py-1.5 text-[10px] leading-tight text-foreground shadow-sm backdrop-blur-sm sm:left-auto sm:right-6 sm:max-w-42.5 sm:translate-x-0 sm:px-3 sm:py-2 sm:text-[11px]"
+          animate={shouldReduceMotion ? undefined : { y: [0, -4, 0] }}
+          transition={{ repeat: Number.POSITIVE_INFINITY, duration: 4.2, ease: "easeInOut", delay: 0.2 }}
+        >
+          <p className="font-semibold text-primary">{activeLocation.name}</p>
+          <p className="text-muted-foreground">{activeLocation.subtitle}</p>
+        </motion.div>
+
+        <motion.div
+          className="absolute right-2 top-10 hidden rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground sm:block"
+          animate={shouldReduceMotion ? undefined : { y: [0, -6, 0] }}
+          transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3.5, ease: "easeInOut" }}
+        >
+          Student-led impact
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-8 left-0 hidden rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground sm:block"
+          animate={shouldReduceMotion ? undefined : { y: [0, 5, 0] }}
+          transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3, ease: "easeInOut", delay: 0.4 }}
+        >
+          Campus biodiversity
+        </motion.div>
+      </div>
     </div>
   )
 }
@@ -455,7 +451,7 @@ export default function HeroSection() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
-          className="flex min-h-75 items-center justify-center sm:min-h-85"
+          className="grid w-full min-h-75 place-items-center sm:min-h-85"
         >
           <GlobeVisual shouldReduceMotion={!!shouldReduceMotion} />
         </motion.div>
