@@ -41,7 +41,7 @@ export default function ObservationTile({
         </div>
       )}
 
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-1.5 text-white sm:p-2">
+      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-1.5 text-white sm:p-2">
         <p className="line-clamp-1 text-[10px] font-medium sm:text-[11px]">{speciesName}</p>
         <p className="text-[9px] text-white/85 sm:text-[10px]">{observedDate}</p>
         <p className="line-clamp-1 text-[9px] text-white/75 sm:text-[10px]">{reporterName}</p>

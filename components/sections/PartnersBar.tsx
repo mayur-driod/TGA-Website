@@ -33,7 +33,7 @@ export default function PartnersBar() {
                 rel={isExternal ? "noopener noreferrer" : undefined}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-card px-4 py-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-lg hover:shadow-primary/10"
               >
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-primary/20 via-primary/60 to-primary/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                 <div className="mb-3 inline-flex rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
                   {partner.featured ? "Main partner" : "Partner"}

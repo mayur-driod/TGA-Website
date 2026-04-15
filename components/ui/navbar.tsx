@@ -214,7 +214,7 @@ const Navbar1 = ({
 const Logo = ({ className }: { className?: string }) => {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative h-9 w-[122px] overflow-hidden rounded-md sm:h-10 sm:w-[140px]">
+      <div className="relative h-9 w-30.5 overflow-hidden rounded-md sm:h-10 sm:w-35">
         <Image
           src="/assets/logo/TGA_Main_Logo.jpeg"
           alt="The Green Alliance"

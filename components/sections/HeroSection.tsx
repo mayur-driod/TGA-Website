@@ -304,7 +304,7 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
   }, [globeSize, configureGlobe])
 
   return (
-    <div className="relative mx-auto flex h-[300px] w-[300px] items-center justify-center sm:h-[360px] sm:w-[360px] md:h-[390px] md:w-[390px] lg:h-[430px] lg:w-[430px]">
+    <div className="relative mx-auto flex h-75 w-75 items-center justify-center sm:h-90 sm:w-90 md:h-97.5 md:w-97.5 lg:h-107.5 lg:w-107.5">
       <div className="pointer-events-none absolute h-[82%] w-[82%] rounded-full border border-primary/25" />
       <div className="pointer-events-none absolute h-[74%] w-[74%] rounded-full bg-primary/10 blur-2xl" />
 
@@ -378,7 +378,7 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
       })}
 
       <motion.div
-        className="absolute bottom-2 right-2 max-w-[130px] rounded-2xl border border-primary/20 bg-background/85 px-2 py-1.5 text-[10px] leading-tight text-foreground shadow-sm backdrop-blur-sm sm:right-6 sm:max-w-[170px] sm:px-3 sm:py-2 sm:text-[11px]"
+        className="absolute bottom-2 right-2 max-w-32.5 rounded-2xl border border-primary/20 bg-background/85 px-2 py-1.5 text-[10px] leading-tight text-foreground shadow-sm backdrop-blur-sm sm:right-6 sm:max-w-42.5 sm:px-3 sm:py-2 sm:text-[11px]"
         animate={shouldReduceMotion ? undefined : { y: [0, -4, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 4.2, ease: "easeInOut", delay: 0.2 }}
       >
@@ -455,7 +455,7 @@ export default function HeroSection() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
-          className="flex min-h-[300px] items-center justify-center sm:min-h-[340px]"
+          className="flex min-h-75 items-center justify-center sm:min-h-85"
         >
           <GlobeVisual shouldReduceMotion={!!shouldReduceMotion} />
         </motion.div>
