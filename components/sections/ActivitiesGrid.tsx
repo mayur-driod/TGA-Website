@@ -14,7 +14,7 @@ export default function ActivitiesGrid() {
           From birdwatching to biodiversity documentation, TGA turns student energy into consistent on-ground environmental action.
         </p>
 
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
           {ACTIVITIES.map((activity, index) => (
             <ActivityCard key={activity.id} activity={activity} index={index} />
           ))}

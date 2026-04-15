@@ -48,8 +48,8 @@ export default function EventsPreview() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-          <article className="rounded-xl border border-forest-100 bg-forest-50 p-6 lg:col-span-2">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3">
+          <article className="rounded-xl border border-forest-100 bg-forest-50 p-5 sm:p-6 lg:col-span-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="inline-flex rounded-full bg-forest-100 px-3 py-1 text-xs font-medium text-forest-800">
                 {featured.type}
@@ -57,14 +57,14 @@ export default function EventsPreview() {
               <span className="text-xs text-muted-foreground">{featuredDate}</span>
             </div>
 
-            <h3 className="mt-4 text-xl font-medium text-forest-900">{featured.title}</h3>
-            <p className="mt-3 max-w-2xl text-sm text-forest-800/90">{featured.shortDescription}</p>
+            <h3 className="mt-4 text-lg font-medium text-forest-900 sm:text-xl">{featured.title}</h3>
+            <p className="mt-3 max-w-2xl text-xs text-forest-800/90 sm:text-sm">{featured.shortDescription}</p>
 
             <p className="mt-4 text-xs text-forest-800/80">
               {featured.time} · {featured.location} · {featured.spotsLeft} spots left
             </p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-2">
+            <div className="mt-5 flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
               <Button asChild>
                 <a href={featured.registrationUrl} target="_blank" rel="noopener noreferrer">
                   Register now
@@ -78,7 +78,7 @@ export default function EventsPreview() {
             </div>
           </article>
 
-          <div className="grid grid-cols-1 gap-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-1">
             {compactEvents.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

@@ -14,7 +14,14 @@ import {
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { motion, useReducedMotion } from "framer-motion"
-import { ArrowRight, Bird } from "lucide-react"
+import {
+  ArrowRight,
+  Binoculars,
+  Bird,
+  Camera,
+  Recycle,
+  type LucideIcon,
+} from "lucide-react"
 import type { GlobeMethods, GlobeProps } from "react-globe.gl"
 import { Button } from "@/components/ui/button"
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants"
@@ -50,12 +57,13 @@ type LandPolygonDatum = {
   geometry: GeoJsonGeometry
 }
 
-type BirdOrbit = {
+type OrbitBadge = {
   xClass: string
   yClass: string
   duration: number
   delay: number
   rotate: number
+  icon: LucideIcon
 }
 
 const HERO_LOCATIONS: HeroLocation[] = [
@@ -93,27 +101,38 @@ const HERO_LOCATIONS: HeroLocation[] = [
   },
 ]
 
-const BIRD_ORBITS: BirdOrbit[] = [
+const ORBIT_BADGES: OrbitBadge[] = [
   {
-    xClass: "left-8",
-    yClass: "top-12",
+    xClass: "sm:left-6 md:left-8",
+    yClass: "sm:top-10 md:top-12",
     duration: 5.2,
     delay: 0,
     rotate: -12,
+    icon: Bird,
   },
   {
-    xClass: "right-10",
-    yClass: "top-20",
+    xClass: "sm:right-6 md:right-10",
+    yClass: "sm:top-16 md:top-20",
     duration: 4.8,
     delay: 0.5,
     rotate: 14,
+    icon: Camera,
   },
   {
-    xClass: "left-12",
-    yClass: "bottom-16",
+    xClass: "sm:left-8 md:left-12",
+    yClass: "sm:bottom-12 md:bottom-16",
     duration: 5.6,
     delay: 0.9,
     rotate: 8,
+    icon: Recycle,
+  },
+  {
+    xClass: "sm:right-8 md:right-12",
+    yClass: "sm:bottom-16 md:bottom-20",
+    duration: 5,
+    delay: 0.3,
+    rotate: -7,
+    icon: Binoculars,
   },
 ]
 
@@ -234,13 +253,23 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
 
   useEffect(() => {
     const setSize = () => {
+      if (window.innerWidth < 480) {
+        setGlobeSize(300)
+        return
+      }
+
       if (window.innerWidth < 640) {
-        setGlobeSize(340)
+        setGlobeSize(330)
+        return
+      }
+
+      if (window.innerWidth < 768) {
+        setGlobeSize(360)
         return
       }
 
       if (window.innerWidth < 1024) {
-        setGlobeSize(380)
+        setGlobeSize(390)
         return
       }
 
@@ -275,7 +304,7 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
   }, [globeSize, configureGlobe])
 
   return (
-    <div className="relative mx-auto flex h-[360px] w-[360px] items-center justify-center sm:h-[400px] sm:w-[400px] lg:h-[430px] lg:w-[430px]">
+    <div className="relative mx-auto flex h-[300px] w-[300px] items-center justify-center sm:h-[360px] sm:w-[360px] md:h-[390px] md:w-[390px] lg:h-[430px] lg:w-[430px]">
       <div className="pointer-events-none absolute h-[82%] w-[82%] rounded-full border border-primary/25" />
       <div className="pointer-events-none absolute h-[74%] w-[74%] rounded-full bg-primary/10 blur-2xl" />
 
@@ -320,32 +349,36 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
         />
       </div>
 
-      {BIRD_ORBITS.map((orbit, index) => (
-        <motion.div
-          key={`${orbit.xClass}-${orbit.yClass}`}
-          className={`pointer-events-none absolute ${orbit.xClass} ${orbit.yClass} rounded-full border border-primary/20 bg-background/70 p-1.5 text-primary shadow-sm backdrop-blur-sm`}
-          style={{ rotate: orbit.rotate }}
-          animate={
-            shouldReduceMotion
-              ? undefined
-              : {
-                  x: [0, index % 2 === 0 ? 12 : -12, 0],
-                  y: [0, -8, 0],
-                }
-          }
-          transition={{
-            repeat: Number.POSITIVE_INFINITY,
-            duration: orbit.duration,
-            delay: orbit.delay,
-            ease: "easeInOut",
-          }}
-        >
-          <Bird className="h-3.5 w-3.5" />
-        </motion.div>
-      ))}
+      {ORBIT_BADGES.map((orbit, index) => {
+        const OrbitIcon = orbit.icon
+
+        return (
+          <motion.div
+            key={`${orbit.xClass}-${orbit.yClass}`}
+            className={`pointer-events-none absolute hidden ${orbit.xClass} ${orbit.yClass} rounded-full border border-primary/20 bg-background/70 p-1.5 text-primary shadow-sm backdrop-blur-sm sm:flex`}
+            style={{ rotate: orbit.rotate }}
+            animate={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    x: [0, index % 2 === 0 ? 12 : -12, 0],
+                    y: [0, -8, 0],
+                  }
+            }
+            transition={{
+              repeat: Number.POSITIVE_INFINITY,
+              duration: orbit.duration,
+              delay: orbit.delay,
+              ease: "easeInOut",
+            }}
+          >
+            <OrbitIcon className="h-3.5 w-3.5" />
+          </motion.div>
+        )
+      })}
 
       <motion.div
-        className="absolute bottom-2 right-6 max-w-[170px] rounded-2xl border border-primary/20 bg-background/85 px-3 py-2 text-[11px] leading-tight text-foreground shadow-sm backdrop-blur-sm"
+        className="absolute bottom-2 right-2 max-w-[130px] rounded-2xl border border-primary/20 bg-background/85 px-2 py-1.5 text-[10px] leading-tight text-foreground shadow-sm backdrop-blur-sm sm:right-6 sm:max-w-[170px] sm:px-3 sm:py-2 sm:text-[11px]"
         animate={shouldReduceMotion ? undefined : { y: [0, -4, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 4.2, ease: "easeInOut", delay: 0.2 }}
       >
@@ -354,7 +387,7 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
       </motion.div>
 
       <motion.div
-        className="absolute right-2 top-10 rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground"
+        className="absolute right-2 top-10 hidden rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground sm:block"
         animate={shouldReduceMotion ? undefined : { y: [0, -6, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3.5, ease: "easeInOut" }}
       >
@@ -362,7 +395,7 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-8 left-0 rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground"
+        className="absolute bottom-8 left-0 hidden rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-[11px] font-medium text-foreground sm:block"
         animate={shouldReduceMotion ? undefined : { y: [0, 5, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3, ease: "easeInOut", delay: 0.4 }}
       >
@@ -422,7 +455,7 @@ export default function HeroSection() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
-          className="flex min-h-[340px] items-center justify-center"
+          className="flex min-h-[300px] items-center justify-center sm:min-h-[340px]"
         >
           <GlobeVisual shouldReduceMotion={!!shouldReduceMotion} />
         </motion.div>

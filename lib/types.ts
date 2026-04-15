@@ -97,4 +97,25 @@ export interface Partner {
   name: string
   shortName: string
   url: string
+  logoSrc: string
+  logoAlt: string
+  tagline?: string
+  featured?: boolean
+}
+
+export interface ParentOrganisation {
+  name: string
+  shortName: string
+  url: string
+  logoSrc: string
+  logoAlt: string
+  description: string
+}
+
+export interface CommunityPlatform {
+  name: string
+  shortName: string
+  url: string
+  logoSrc: string
+  logoAlt: string
 }

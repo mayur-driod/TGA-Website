@@ -24,7 +24,7 @@ export default function MobileMenu({ links }: MobileMenuProps) {
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[86vw] max-w-sm">
+      <SheetContent side="right" className="w-full max-w-sm">
         <SheetHeader>
           <SheetTitle>The Green Alliance</SheetTitle>
           <SheetDescription>Explore pages and opportunities to join TGA.</SheetDescription>

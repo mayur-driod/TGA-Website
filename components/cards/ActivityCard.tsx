@@ -42,7 +42,7 @@ export default function ActivityCard({ activity, index }: ActivityCardProps) {
     >
       <Link
         href={activity.href}
-        className="block rounded-xl border border-border bg-card p-6 transition-all hover:border-forest-100 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2"
+        className="block rounded-xl border border-border bg-card p-5 transition-all hover:border-forest-100 hover:shadow-sm active:scale-[0.99] sm:p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2"
       >
         <div className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium">
           <span className={cn("inline-flex h-9 w-9 items-center justify-center rounded-lg", iconBgByColor[activity.colorScheme])}>

@@ -1,4 +1,11 @@
-import type { ActivityItem, NavItem, Partner, StatItem } from "@/lib/types"
+import type {
+  ActivityItem,
+  CommunityPlatform,
+  NavItem,
+  ParentOrganisation,
+  Partner,
+  StatItem,
+} from "@/lib/types"
 
 export const SITE_NAME = "The Green Alliance"
 export const SITE_TAGLINE = "A student led initiative to raise awareness"
@@ -20,14 +27,55 @@ export const STATS: StatItem[] = [
   { value: 120, suffix: "+", label: "Active members" },
   { value: 48, suffix: "", label: "Events conducted" },
   { value: 200, suffix: "+", label: "Species documented" },
-  { value: 3, suffix: "", label: "Partner organisations" },
+  { value: 2, suffix: "", label: "Core partner organisations" },
 ]
 
 export const PARTNERS: Partner[] = [
-  { name: "Ataavi Bird Foundation", shortName: "Ataavi", url: "#" },
-  { name: "Nature Conservation Foundation", shortName: "NCF", url: "https://ncf-india.org" },
-  { name: "RV University", shortName: "RVU", url: "https://rvu.edu.in" },
-  { name: "eBird India", shortName: "eBird", url: "https://ebird.org/india" },
+  {
+    name: "Ataavi Bird Foundation",
+    shortName: "Ataavi",
+    url: "https://ataavi.org/",
+    logoSrc: "/assets/logo/Ataavi_Logo.png",
+    logoAlt: "Ataavi Bird Foundation logo",
+    tagline: "Grassroots birding and conservation education",
+    featured: true,
+  },
+  {
+    name: "Nature Conservation Foundation",
+    shortName: "NCF",
+    url: "https://ncf-india.org",
+    logoSrc: "/assets/logo/NatureConservationFoundation.png",
+    logoAlt: "Nature Conservation Foundation logo",
+    tagline: "Research-driven biodiversity and ecosystem conservation",
+    featured: true,
+  },
+]
+
+export const PARENT_ORGANISATION: ParentOrganisation = {
+  name: "RV University",
+  shortName: "RVU",
+  url: "https://rvu.edu.in",
+  logoSrc: "/assets/logo/RV_University_Logo.png",
+  logoAlt: "RV University logo",
+  description:
+    "The Green Alliance operates as a student initiative under RV University, Bengaluru, with guidance, academic support, and institutional backing.",
+}
+
+export const COMMUNITY_PLATFORMS: CommunityPlatform[] = [
+  {
+    name: "eBird India",
+    shortName: "eBird",
+    url: "https://ebird.org/hotspot/L22401771",
+    logoSrc: "/assets/logo/Ebird.png",
+    logoAlt: "eBird logo",
+  },
+  {
+    name: "iNaturalist",
+    shortName: "iNaturalist",
+    url: "https://www.inaturalist.org/projects/wildlife-of-rv-university",
+    logoSrc: "/assets/logo/INaturalist.png",
+    logoAlt: "iNaturalist logo",
+  },
 ]
 
 export const ACTIVITIES: ActivityItem[] = [

@@ -32,7 +32,7 @@ export default function JoinSection() {
           Join The Green Alliance to explore, document, and protect urban biodiversity with a student-first community at RVU.
         </p>
 
-        <div className="mt-6 flex w-full flex-col items-stretch gap-3 sm:flex-row">
+        <div className="mt-6 flex w-full flex-col items-stretch gap-2 sm:flex-row sm:gap-3">
           <label htmlFor="join-email" className="sr-only">
             RVU email
           </label>
@@ -42,9 +42,9 @@ export default function JoinSection() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder={`yourname${RVU_EMAIL_DOMAIN}`}
-            className="h-10 flex-1 rounded-lg border border-input bg-background px-3 text-sm text-foreground outline-none transition focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2"
+            className="h-11 flex-1 rounded-lg border border-input bg-background px-3 text-sm text-foreground outline-none transition focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2"
           />
-          <Button onClick={handleGetStarted} className="h-10 px-5">
+          <Button onClick={handleGetStarted} className="h-11 px-5">
             Get started
           </Button>
         </div>
