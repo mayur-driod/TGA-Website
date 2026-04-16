@@ -2,7 +2,9 @@
 
 import Link from "next/link"
 import { Menu } from "lucide-react"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
+import { SignOutButton } from "@/components/auth/SignOutButton"
 import {
   Sheet,
   SheetContent,
@@ -17,6 +19,9 @@ type MobileMenuProps = {
 }
 
 export default function MobileMenu({ links }: MobileMenuProps) {
+  const { data: session } = useSession()
+  const role = session?.user?.role
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -39,9 +44,31 @@ export default function MobileMenu({ links }: MobileMenuProps) {
               {link.label}
             </Link>
           ))}
-          <Button asChild className="mt-4">
-            <Link href="/sign-up">Join TGA</Link>
-          </Button>
+
+          {session?.user ? (
+            <>
+              <div className="mt-4 h-px bg-border" />
+              <Button asChild variant="outline">
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              {(role === "ADMIN" || role === "MAINTAINER") && (
+                <Button asChild>
+                  <Link href="/admin">Admin</Link>
+                </Button>
+              )}
+              <SignOutButton className="justify-start" />
+            </>
+          ) : (
+            <>
+              <div className="mt-4 h-px bg-border" />
+              <Button asChild variant="outline">
+                <Link href="/sign-in">Sign in</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/sign-in">Join TGA</Link>
+              </Button>
+            </>
+          )}
         </nav>
       </SheetContent>
     </Sheet>

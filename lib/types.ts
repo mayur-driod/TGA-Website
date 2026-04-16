@@ -10,10 +10,14 @@ export interface Event {
   fullDescription: string
   spotsTotal: number
   spotsLeft: number
-  registrationUrl: string
+  registrationUrl?: string
   coverImage: string
   tags: string[]
   featured: boolean
+  requiresRvuEmail?: boolean
+  isPublished?: boolean
+  isPast?: boolean
+  externalFormUrl?: string | null
 }
 
 export interface BlogPost {

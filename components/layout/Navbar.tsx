@@ -3,7 +3,18 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { SignOutButton } from "@/components/auth/SignOutButton"
 import MobileMenu from "@/components/layout/MobileMenu"
 import { cn } from "@/lib/utils"
 
@@ -18,6 +29,22 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = React.useState(false)
+  const { data: session } = useSession()
+  const role = session?.user?.role
+  const avatarFallback = React.useMemo(() => {
+    const name = session?.user?.name?.trim()
+
+    if (name) {
+      const parts = name.split(/\s+/).filter(Boolean)
+      return parts
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase() ?? "")
+        .join("")
+    }
+
+    const email = session?.user?.email?.trim()
+    return (email?.slice(0, 2) ?? "U").toUpperCase()
+  }, [session?.user?.email, session?.user?.name])
 
   React.useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50)
@@ -60,10 +87,61 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <Button asChild>
-            <Link href="/sign-up">Join TGA</Link>
-          </Button>
+        <div className="hidden items-center gap-2 lg:flex">
+          {session?.user ? (
+            <>
+              {(role === "ADMIN" || role === "MAINTAINER") && (
+                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-primary">
+                  {role}
+                </span>
+              )}
+              <Button asChild variant="outline" size="sm">
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              {(role === "ADMIN" || role === "MAINTAINER") && (
+                <Button asChild size="sm">
+                  <Link href="/admin">Admin</Link>
+                </Button>
+              )}
+              <SignOutButton />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="Open account menu"
+                    className="rounded-full outline-none ring-ring/50 transition focus-visible:ring-3"
+                  >
+                    <Avatar size="sm">
+                      <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? "User avatar"} />
+                      <AvatarFallback>{avatarFallback}</AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>
+                    <p className="truncate text-sm font-medium text-foreground">{session.user.name ?? "Account"}</p>
+                    <p className="mt-0.5 truncate text-xs font-normal text-muted-foreground">{session.user.email}</p>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings">Settings</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="outline">
+                <Link href="/sign-in">Sign in</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/sign-in">Join TGA</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         <div className="lg:hidden">

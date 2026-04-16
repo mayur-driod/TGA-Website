@@ -65,11 +65,17 @@ export default function EventsPreview() {
             </p>
 
             <div className="mt-5 flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-              <Button asChild>
-                <a href={featured.registrationUrl} target="_blank" rel="noopener noreferrer">
-                  Register now
-                </a>
-              </Button>
+              {featured.registrationUrl ? (
+                <Button asChild>
+                  <a href={featured.registrationUrl} target="_blank" rel="noopener noreferrer">
+                    Register now
+                  </a>
+                </Button>
+              ) : (
+                <Button asChild>
+                  <Link href={`/events/${featured.slug}`}>View details</Link>
+                </Button>
+              )}
               {featured.spotsLeft < 10 ? (
                 <span className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">
                   Only {featured.spotsLeft} spots left
