@@ -10,6 +10,7 @@ import type {
 export const SITE_NAME = "The Green Alliance"
 export const SITE_TAGLINE = "A student led initiative to raise awareness"
 export const SITE_URL = "https://thegreenalliancervuniversity.vercel.app/"
+export const CONTACT_EMAIL = "club_thegreenalliance@rvu.edu.in"
 export const RVU_EMAIL_DOMAIN = "@rvu.edu.in"
 export const WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/JfhVgBdd1wS0InWopFaBal?mode=gi_t"
 export const INATURALIST_PROJECT_URL = "https://www.inaturalist.org/projects/wildlife-of-rv-university"
@@ -20,7 +21,7 @@ export const NAV_LINKS: NavItem[] = [
   { label: "Blog", href: "/blog" },
   { label: "Biodiversity", href: "/biodiversity" },
   { label: "Team", href: "/team" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/#contact" },
 ]
 
 export const STATS: StatItem[] = [

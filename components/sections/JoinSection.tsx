@@ -1,66 +1,56 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
+import ContactForm from "@/components/common/ContactForm"
 import SectionLabel from "@/components/common/SectionLabel"
-import { Button } from "@/components/ui/button"
 import { RVU_EMAIL_DOMAIN, WHATSAPP_COMMUNITY_URL } from "@/lib/constants"
 
 export default function JoinSection() {
-  const [email, setEmail] = useState("")
-  const router = useRouter()
+  const { data: session } = useSession()
 
-  const handleGetStarted = () => {
-    const value = email.trim()
-    if (!value) {
-      router.push("/sign-up")
-      return
-    }
-
-    router.push(`/sign-up?email=${encodeURIComponent(value)}`)
-  }
+  const role = session?.user?.role
+  const normalizedEmail = session?.user?.email?.toLowerCase() ?? ""
+  const isRvuVerified = normalizedEmail.endsWith(RVU_EMAIL_DOMAIN)
+  const canViewWhatsapp = Boolean(session?.user && (isRvuVerified || role === "ADMIN" || role === "MAINTAINER"))
 
   return (
-    <section className="bg-forest-50/40 px-4 py-20 md:px-8 lg:px-12">
-      <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-        <SectionLabel>Become a member</SectionLabel>
+    <section id="contact" className="scroll-mt-24 bg-secondary/40 px-4 py-20 md:px-8 lg:px-12">
+      <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
+        <SectionLabel>Contact</SectionLabel>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-          Be part of the change
+          Get in
+          <span className="relative mx-2 inline-block px-1.5">
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-1 h-3.5 -rotate-1 rounded-md bg-primary/10"
+            />
+            <span className="relative text-green-500 font-bold">touch</span>
+          </span>
+          with us
         </h2>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          Join The Green Alliance to explore, document, and protect urban biodiversity with a student-first community at RVU.
+          Have a collaboration idea, event proposal, or question? Send us a message and our team will reply to you by email.
         </p>
 
-        <div className="mt-6 flex w-full flex-col items-stretch gap-2 sm:flex-row sm:gap-3">
-          <label htmlFor="join-email" className="sr-only">
-            RVU email
-          </label>
-          <input
-            id="join-email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder={`yourname${RVU_EMAIL_DOMAIN}`}
-            className="h-11 flex-1 rounded-lg border border-input bg-background px-3 text-sm text-foreground outline-none transition focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2"
-          />
-          <Button onClick={handleGetStarted} className="h-11 px-5">
-            Get started
-          </Button>
+        <div className="mt-8 w-full text-left">
+          <ContactForm />
         </div>
 
-        <p className="mt-3 text-xs text-muted-foreground">
-          Only {RVU_EMAIL_DOMAIN} emails are accepted
-        </p>
-
-        <Link
-          href={WHATSAPP_COMMUNITY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 text-sm font-medium text-primary hover:underline"
-        >
-          Or join our WhatsApp community {"->"}
-        </Link>
+        {canViewWhatsapp ? (
+          <Link
+            href={WHATSAPP_COMMUNITY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 text-sm font-medium text-primary hover:underline"
+          >
+            Or join our WhatsApp community {"->"}
+          </Link>
+        ) : (
+          <p className="mt-4 text-xs text-muted-foreground">
+            WhatsApp community access is limited to verified RVU members and club admins.
+          </p>
+        )}
       </div>
     </section>
   )

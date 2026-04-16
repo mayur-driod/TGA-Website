@@ -4,7 +4,7 @@
     "slug": "summer-dawn-bird-walk-rvu-campus",
     "title": "Summer Dawn Bird Walk - RVU Campus",
     "type": "Birdwatch",
-    "date": "2025-03-16",
+    "date": "2026-05-16",
     "time": "6:00 AM - 8:30 AM",
     "location": "RV University Main Campus, Bengaluru",
     "shortDescription": "A guided sunrise campus trail to observe resident and migratory birds before classes begin.",
@@ -14,14 +14,16 @@
     "registrationUrl": "https://forms.gle/tga-summer-birdwalk-2025",
     "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/summer-birdwalk.jpg",
     "tags": ["birdwatching", "campus", "field-notes"],
-    "featured": true
+    "featured": true,
+    "requiresRvuEmail": true,
+    "isPublished": true
   },
   {
     "id": "gbbc-2025-participation",
     "slug": "great-backyard-bird-count-2025-rvu",
     "title": "Great Backyard Bird Count 2025 - RVU Participation",
     "type": "Global event",
-    "date": "2025-02-15",
+    "date": "2026-06-15",
     "time": "6:15 AM - 9:00 AM",
     "location": "RV University and nearby Kengeri birding patches",
     "shortDescription": "TGA's annual participation in GBBC with checklist submissions to global citizen science databases.",
@@ -31,7 +33,9 @@
     "registrationUrl": "https://forms.gle/tga-gbbc-2025",
     "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/gbbc-2025.jpg",
     "tags": ["GBBC", "citizen-science", "eBird"],
-    "featured": false
+    "featured": false,
+    "requiresRvuEmail": false,
+    "isPublished": true
   },
   {
     "id": "kengeri-lake-cleanup-2025",
@@ -48,7 +52,9 @@
     "registrationUrl": "https://forms.gle/tga-kengeri-cleanup-2025",
     "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/kengeri-cleanup.jpg",
     "tags": ["cleanup", "community", "wetland"],
-    "featured": false
+    "featured": false,
+    "requiresRvuEmail": true,
+    "isPublished": true
   },
   {
     "id": "urban-wildlife-corridors-talk-ncf",
@@ -65,14 +71,16 @@
     "registrationUrl": "https://forms.gle/tga-ncf-talk-2025",
     "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/ncf-talk.jpg",
     "tags": ["expert-talk", "NCF", "urban-ecology"],
-    "featured": false
+    "featured": false,
+    "requiresRvuEmail": false,
+    "isPublished": true
   },
   {
     "id": "wmdb-2025-bird-walk",
     "slug": "world-migratory-bird-day-2025-walk",
     "title": "World Migratory Bird Day Walk",
     "type": "Birdwatch",
-    "date": "2025-05-10",
+    "date": "2026-05-10",
     "time": "6:00 AM - 8:45 AM",
     "location": "RVU Campus Trail + Nearby Open Wet Patch",
     "shortDescription": "A themed bird walk focusing on migratory routes, stopover habitats, and conservation messaging.",
@@ -82,14 +90,16 @@
     "registrationUrl": "https://forms.gle/tga-wmdb-2025",
     "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/wmdb-walk.jpg",
     "tags": ["migratory-birds", "awareness", "birdwatching"],
-    "featured": false
+    "featured": false,
+    "requiresRvuEmail": true,
+    "isPublished": true
   },
   {
     "id": "biodiversity-field-day-volunteers-2025",
     "slug": "biodiversity-assessment-field-day-volunteers",
     "title": "Biodiversity Assessment Field Day - Open to Volunteers",
     "type": "Workshop",
-    "date": "2025-06-01",
+    "date": "2026-07-01",
     "time": "7:30 AM - 11:30 AM",
     "location": "RV University Campus Sectors A, C, and E",
     "shortDescription": "A practical field session introducing sampling methods and digital logging for campus biodiversity data.",
@@ -99,6 +109,8 @@
     "registrationUrl": "https://forms.gle/tga-biodiversity-fieldday-2025",
     "coverImage": "https://res.cloudinary.com/demo/image/upload/tga/field-day.jpg",
     "tags": ["biodiversity", "volunteer", "field-methods"],
-    "featured": false
+    "featured": false,
+    "requiresRvuEmail": false,
+    "isPublished": true
   }
 ]
