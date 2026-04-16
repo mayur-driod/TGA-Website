@@ -24,7 +24,7 @@ const NAV_LINKS = [
   { label: "Blog", href: "/blog" },
   { label: "Biodiversity", href: "/biodiversity" },
   { label: "Team", href: "/team" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/#contact" },
 ]
 
 export default function Navbar() {
