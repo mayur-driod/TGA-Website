@@ -5,6 +5,8 @@ import { RVU_EMAIL_DOMAIN } from "@/lib/constants"
 export const Permissions = {
   canManageEvents: (role: Role) => role === "MAINTAINER" || role === "ADMIN",
 
+  canManageTeam: (role: Role) => role === "MAINTAINER" || role === "ADMIN",
+
   canManageBlog: (role: Role) => role === "MAINTAINER" || role === "ADMIN",
 
   canManageUsers: (role: Role) => role === "ADMIN",

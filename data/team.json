@@ -1,76 +1,173 @@
 {
-  "students": [
+  "studentAdvisors": [
     {
-      "id": "stu-nivedita-rao",
+      "id": "advisor-nivedita-rao",
       "name": "Nivedita Rao",
+      "role": "Senior Student Advisor",
+      "department": "School of Liberal Arts and Sciences",
+      "year": "4th Year",
+      "bio": "Nivedita mentors the leadership team on annual planning, volunteer development, and partner coordination for club-wide impact.",
+      "avatar": "NR",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Nivedita%20Rao",
+      "focusAreas": ["Strategic planning", "Mentorship", "Field ethics"],
+      "instagram": "nivedita.birds",
+      "email": "nivedita.rao@rvu.edu.in",
+      "isFounder": true
+    },
+    {
+      "id": "advisor-arjun-menon",
+      "name": "Arjun Menon",
+      "role": "Senior Student Advisor",
+      "department": "School of Computer Science and Engineering",
+      "year": "4th Year",
+      "bio": "Arjun guides event planning teams and birdwatching captains while helping new leaders run field sessions smoothly and safely.",
+      "avatar": "AM",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Arjun%20Menon",
+      "focusAreas": ["Birdwatching systems", "Volunteer training", "Data quality"],
+      "instagram": "arjun.on.trails",
+      "email": "arjun.menon@rvu.edu.in",
+      "isFounder": true
+    },
+    {
+      "id": "advisor-samiksha-pai",
+      "name": "Samiksha Pai",
+      "role": "Senior Student Advisor",
+      "department": "School of Business",
+      "year": "4th Year",
+      "bio": "Samiksha supports committee leads on outreach strategy, campus communication, and long-term collaboration planning.",
+      "avatar": "SP",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Samiksha%20Pai",
+      "focusAreas": ["Campaign strategy", "Partnerships", "Storytelling"],
+      "instagram": "samiksha.green",
+      "email": "samiksha.pai@rvu.edu.in",
+      "isFounder": true
+    },
+    {
+      "id": "advisor-pranav-joshi",
+      "name": "Pranav Joshi",
+      "role": "Student Advisor",
+      "department": "School of Design and Innovation",
+      "year": "3rd Year",
+      "bio": "Pranav helps leadership teams with event experience design, volunteer handoffs, and smooth on-ground execution.",
+      "avatar": "PJ",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Pranav%20Joshi",
+      "focusAreas": ["Operations review", "Event flow", "Volunteer coordination"],
+      "instagram": null,
+      "email": "pranav.joshi@rvu.edu.in"
+    }
+  ],
+  "leadershipCore": [
+    {
+      "id": "lead-dharini-n",
+      "name": "Dharini N",
       "role": "President",
       "department": "School of Liberal Arts and Sciences",
       "year": "3rd Year",
-      "bio": "Nivedita leads TGA's strategic planning and member engagement. She works closely with student volunteers to keep field activities consistent and safe.",
-      "avatar": "NR",
-      "interests": ["Urban birds", "Citizen science", "Community outreach"],
-      "instagram": "nivedita.birds",
-      "email": "nivedita.rao@rvu.edu.in"
-    },
-    {
-      "id": "stu-arjun-menon",
-      "name": "Arjun Menon",
-      "role": "Birdwatching Lead",
-      "department": "School of Computer Science and Engineering",
-      "year": "2nd Year",
-      "bio": "Arjun coordinates weekly birding routes and beginner onboarding. He also supports checklist quality review for GBBC and eBird events.",
-      "avatar": "AM",
-      "interests": ["Raptors", "Field notes", "Acoustic identification"],
-      "instagram": "arjun.on.trails",
-      "email": "arjun.menon@rvu.edu.in"
-    },
-    {
-      "id": "stu-samiksha-pai",
-      "name": "Samiksha Pai",
-      "role": "Campaigns Lead",
-      "department": "School of Business",
-      "year": "3rd Year",
-      "bio": "Samiksha drives TGA's awareness campaigns and partnerships. She designs communication around cleanup drives and sustainability events.",
-      "avatar": "SP",
-      "interests": ["Waste management", "Behavior change", "Sustainability storytelling"],
-      "instagram": "samiksha.green",
-      "email": "samiksha.pai@rvu.edu.in"
-    },
-    {
-      "id": "stu-dharini-n",
-      "name": "Dharini N",
-      "role": "Biodiversity Assessment Coordinator",
-      "department": "School of Liberal Arts and Sciences",
-      "year": "2nd Year",
-      "bio": "Dharini maintains species logs and observation workflows for the campus assessment. She helps volunteers use iNaturalist for clean and useful submissions.",
+      "bio": "Leads the club's vision, cross-committee planning, and execution cadence across conservation and awareness initiatives.",
       "avatar": "DN",
-      "interests": ["Butterflies", "Flora mapping", "iNaturalist workflows"],
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Dharini%20N",
+      "focusAreas": ["Leadership", "Biodiversity planning", "Community direction"],
       "instagram": "dharini.ecology",
       "email": "dharini.n@rvu.edu.in"
     },
     {
-      "id": "stu-karthik-iyer",
+      "id": "lead-karthik-iyer",
       "name": "Karthik Iyer",
-      "role": "Events Operations",
+      "role": "Vice President",
       "department": "School of Design and Innovation",
-      "year": "1st Year",
-      "bio": "Karthik supports logistics, volunteer coordination, and on-ground execution during field events. He focuses on participant safety and smooth event flow.",
+      "year": "2nd Year",
+      "bio": "Oversees inter-committee operations and member experience, ensuring events are participant-friendly and outcome-focused.",
       "avatar": "KI",
-      "interests": ["Event operations", "Nature photography", "Trail planning"],
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Karthik%20Iyer",
+      "focusAreas": ["Operations", "Event logistics", "Team workflows"],
       "instagram": null,
       "email": "karthik.iyer@rvu.edu.in"
+    },
+    {
+      "id": "lead-ananya-rai",
+      "name": "Ananya Rai",
+      "role": "Student Coordinator",
+      "department": "School of Law",
+      "year": "2nd Year",
+      "bio": "Coordinates member communication, volunteer rotations, and club-wide scheduling across events and campaigns.",
+      "avatar": "AR",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Ananya%20Rai",
+      "focusAreas": ["Member coordination", "Internal communication", "Planning"],
+      "instagram": "ananya_rai",
+      "email": "ananya.rai@rvu.edu.in"
+    },
+    {
+      "id": "lead-vivek-shetty",
+      "name": "Vivek Shetty",
+      "role": "Treasurer",
+      "department": "School of Business",
+      "year": "2nd Year",
+      "bio": "Manages budgeting, activity spend tracking, and finance documentation for sustainable club operations.",
+      "avatar": "VS",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Vivek%20Shetty",
+      "focusAreas": ["Budgeting", "Fund planning", "Resource allocation"],
+      "instagram": null,
+      "email": "vivek.shetty@rvu.edu.in"
+    },
+    {
+      "id": "lead-megha-shenoy",
+      "name": "Megha Shenoy",
+      "role": "Outreach Lead",
+      "department": "School of Liberal Arts and Sciences",
+      "year": "2nd Year",
+      "bio": "Leads social visibility and partner communication to amplify campaigns, events, and environmental stories.",
+      "avatar": "MS",
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Megha%20Shenoy",
+      "focusAreas": ["Community outreach", "Content strategy", "Partnership support"],
+      "instagram": "megha.greenvoice",
+      "email": "megha.shenoy@rvu.edu.in"
     }
   ],
-  "faculty": [
+  "committees": [
+    {
+      "id": "committee-birdwatching",
+      "name": "Birdwatching & Field Committee",
+      "description": "Plans weekly birding walks, prepares beginner onboarding, and maintains checklists for campus and city counts.",
+      "focus": "Field-based nature learning and observation discipline",
+      "leads": ["Arjun Menon", "Dharini N"],
+      "openRoles": ["Trail lead", "Checklist reviewer", "Onboarding volunteer"]
+    },
+    {
+      "id": "committee-biodiversity",
+      "name": "Biodiversity Assessment Committee",
+      "description": "Runs species logging workflows, quality checks for iNaturalist records, and monthly biodiversity snapshots.",
+      "focus": "Campus ecological documentation and trend tracking",
+      "leads": ["Dharini N", "Nivedita Rao"],
+      "openRoles": ["Species data curator", "Photo documentation", "Taxonomy support"]
+    },
+    {
+      "id": "committee-campaigns",
+      "name": "Campaigns & Outreach Committee",
+      "description": "Designs awareness campaigns, storytelling formats, and partner-facing communication for sustainability initiatives.",
+      "focus": "Behavior change, communication, and advocacy",
+      "leads": ["Samiksha Pai", "Megha Shenoy"],
+      "openRoles": ["Content creator", "Campaign planner", "Design volunteer"]
+    },
+    {
+      "id": "committee-events",
+      "name": "Events & Logistics Committee",
+      "description": "Handles event operations, registrations, volunteer shifts, and safety checklists for seamless execution.",
+      "focus": "Operational excellence for every activity",
+      "leads": ["Karthik Iyer", "Ananya Rai"],
+      "openRoles": ["Logistics coordinator", "Registration desk", "Safety marshal"]
+    }
+  ],
+  "facultyMentors": [
     {
       "id": "fac-dr-meera-joshi",
       "name": "Dr. Meera Joshi",
       "role": "Faculty Advisor",
       "department": "School of Liberal Arts and Sciences",
       "year": null,
-      "bio": "Dr. Joshi mentors TGA's ecological initiatives and supports research alignment across student projects. Her guidance helps bridge field activity with academic rigor.",
+      "bio": "Guides the club's ecological direction and helps align student initiatives with responsible field practices and academic depth.",
       "avatar": "MJ",
-      "interests": ["Urban ecology", "Conservation education", "Field methodology"],
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Meera%20Joshi",
+      "focusAreas": ["Urban ecology", "Conservation education", "Field methods"],
       "instagram": null,
       "email": "meera.joshi@rvu.edu.in"
     },
@@ -80,9 +177,10 @@
       "role": "Faculty Co-advisor",
       "department": "School of Computer Science and Engineering",
       "year": null,
-      "bio": "Dr. Hegde supports data workflows, dashboard planning, and technology integration for biodiversity documentation. He advises students on responsible data handling.",
+      "bio": "Supports data systems and technology integration for biodiversity documentation and research-driven student contributions.",
       "avatar": "RH",
-      "interests": ["Data systems", "Environmental sensing", "Open science"],
+      "imageUrl": "https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=Raghav%20Hegde",
+      "focusAreas": ["Data systems", "Open science", "Digital conservation"],
       "instagram": null,
       "email": "raghav.hegde@rvu.edu.in"
     }

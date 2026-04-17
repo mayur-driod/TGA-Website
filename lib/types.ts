@@ -52,6 +52,41 @@ export interface TeamData {
   faculty: Member[]
 }
 
+export interface TeamMemberProfile {
+  id: string
+  name: string
+  role: string
+  department: string
+  year: string | null
+  bio: string
+  avatar: string
+  imageUrl?: string | null
+  focusAreas: string[]
+  socials: TeamSocialLink[]
+  isFounder?: boolean
+}
+
+export interface TeamSocialLink {
+  platform: "linkedin" | "instagram" | "email" | "website" | "other"
+  url: string
+}
+
+export interface TeamCommittee {
+  id: string
+  name: string
+  description: string
+  focus: string
+  leads: string[]
+  openRoles: string[]
+}
+
+export interface TeamHierarchyData {
+  studentAdvisors: TeamMemberProfile[]
+  leadershipCore: TeamMemberProfile[]
+  committees: TeamCommittee[]
+  facultyMentors: TeamMemberProfile[]
+}
+
 export interface BiodiversityGroup {
   name: string
   count: number
