@@ -8,10 +8,17 @@ const authSecret =
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
-  const token = await getToken({
-    req,
-    secret: authSecret,
-  })
+  const token =
+    (await getToken({
+      req,
+      secret: authSecret,
+      cookieName: "__Secure-authjs.session-token",
+    })) ??
+    (await getToken({
+      req,
+      secret: authSecret,
+      cookieName: "authjs.session-token",
+    }))
 
   const isLoggedIn = Boolean(token)
   if (PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
