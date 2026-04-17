@@ -1,6 +1,7 @@
 "use client"
 
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useMemo, useState } from "react"
+import { useSession } from "next-auth/react"
 
 import { CONTACT_EMAIL } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
@@ -22,12 +23,37 @@ const INITIAL_FORM: ContactPayload = {
 }
 
 export default function ContactForm() {
-  const [form, setForm] = useState<ContactPayload>(INITIAL_FORM)
+  const { data: session, status: sessionStatus } = useSession()
+  const sessionDefaults = useMemo(
+    () => ({
+      name: session?.user?.name ?? "",
+      email: session?.user?.email ?? "",
+    }),
+    [session?.user?.name, session?.user?.email],
+  )
+
+  const [form, setForm] = useState<ContactPayload>(() => ({
+    ...INITIAL_FORM,
+    name: sessionDefaults.name,
+    email: sessionDefaults.email,
+  }))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState<{ type: "idle" | "success" | "error"; message: string }>({
     type: "idle",
     message: "",
   })
+
+  useEffect(() => {
+    if (sessionStatus !== "authenticated") {
+      return
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      name: prev.name || sessionDefaults.name,
+      email: prev.email || sessionDefaults.email,
+    }))
+  }, [sessionDefaults.email, sessionDefaults.name, sessionStatus])
 
   const setField = <K extends keyof ContactPayload>(key: K, value: ContactPayload[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -56,7 +82,11 @@ export default function ContactForm() {
       }
 
       setStatus({ type: "success", message: "Message sent. We will get back to you soon." })
-      setForm(INITIAL_FORM)
+      setForm({
+        ...INITIAL_FORM,
+        name: sessionDefaults.name,
+        email: sessionDefaults.email,
+      })
     } catch {
       setStatus({
         type: "error",

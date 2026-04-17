@@ -72,9 +72,26 @@ async function seedEvents() {
   }
 }
 
+async function seedTeamContent() {
+  const raw = await readFile(new URL("../data/team.json", import.meta.url), "utf-8")
+  const teamData = JSON.parse(raw)
+
+  await db.teamContent.upsert({
+    where: { id: "main" },
+    update: {
+      data: teamData,
+    },
+    create: {
+      id: "main",
+      data: teamData,
+    },
+  })
+}
+
 async function main() {
   await seedAdmin()
   await seedEvents()
+  await seedTeamContent()
   console.log("Seeding completed.")
 }
 

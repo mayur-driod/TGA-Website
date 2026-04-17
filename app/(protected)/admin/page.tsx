@@ -42,6 +42,9 @@ export default async function AdminOverviewPage() {
       </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
+        <Link href="/admin/team" className="rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground hover:bg-muted">
+          Manage team
+        </Link>
         <Link href="/admin/events" className="rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground hover:bg-muted">
           Manage events
         </Link>
