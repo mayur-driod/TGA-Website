@@ -1,9 +1,18 @@
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { RoleSelect } from "@/components/admin/RoleSelect"
+import { redirect } from "next/navigation"
 
 export default async function AdminUsersPage() {
   const session = await auth()
+
+  if (!session?.user) {
+    redirect("/sign-in")
+  }
+
+  if (session.user.role !== "ADMIN") {
+    redirect("/sign-in?error=unauthorized")
+  }
 
   const users = await db.user.findMany({
     orderBy: { createdAt: "desc" },
