@@ -1,0 +1,27 @@
+[
+  {
+    "id": "join-membership",
+    "question": "How can I join The Green Alliance (TGA)?",
+    "answer": "You can join by signing up with your RVU email and taking part in our open events. We regularly onboard new members during orientation drives, workshops, and field activities."
+  },
+  {
+    "id": "who-can-participate",
+    "question": "Can non-RVU students participate in TGA events?",
+    "answer": "Some events are open to external participants, while campus-focused initiatives may be limited to RVU students. Check each event listing for participation rules before registering."
+  },
+  {
+    "id": "event-frequency",
+    "question": "How often do you conduct birdwatching or cleanup drives?",
+    "answer": "We usually host activities every month, with more frequent meetups during biodiversity seasons and campaign periods. Upcoming sessions are always listed on our events page."
+  },
+  {
+    "id": "biodiversity-data",
+    "question": "Where can I see biodiversity observations collected by TGA?",
+    "answer": "Live biodiversity observations are available through our iNaturalist-linked biodiversity pages. We also publish key insights and campus summaries on the website."
+  },
+  {
+    "id": "collaborations",
+    "question": "Can organizations collaborate with TGA?",
+    "answer": "Yes. We welcome collaborations for conservation drives, awareness programs, citizen science campaigns, and educational workshops. Use the contact form to share your proposal."
+  }
+]
