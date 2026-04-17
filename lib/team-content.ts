@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client"
 import fallbackTeamData from "@/data/team.json"
 import { db } from "@/lib/db"
 import type { TeamCommittee, TeamHierarchyData, TeamMemberProfile, TeamSocialLink } from "@/lib/types"
@@ -212,10 +213,12 @@ export async function saveTeamHierarchyData(data: TeamHierarchyData): Promise<Te
     throw new Error("invalid-team-data")
   }
 
+  const jsonData = JSON.parse(JSON.stringify(normalized)) as Prisma.InputJsonValue
+
   const saved = await db.teamContent.upsert({
     where: { id: TEAM_CONTENT_ID },
-    update: { data: normalized },
-    create: { id: TEAM_CONTENT_ID, data: normalized },
+    update: { data: jsonData },
+    create: { id: TEAM_CONTENT_ID, data: jsonData },
     select: { data: true },
   })
 
