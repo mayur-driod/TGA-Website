@@ -3,7 +3,7 @@
 import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SignOutButton } from "@/components/auth/SignOutButton"
 import MobileMenu from "@/components/layout/MobileMenu"
 import { cn } from "@/lib/utils"
 
@@ -103,7 +102,6 @@ export default function Navbar() {
                   <Link href="/admin">Admin</Link>
                 </Button>
               )}
-              <SignOutButton />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -128,6 +126,16 @@ export default function Navbar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/settings">Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <button
+                      type="button"
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="w-full cursor-pointer text-left font-medium text-destructive focus:text-destructive"
+                    >
+                      Sign out
+                    </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
