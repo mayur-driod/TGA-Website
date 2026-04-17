@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server"
 
 const PROTECTED_ROUTES = ["/dashboard", "/admin"]
 const authSecret =
-  process.env.AUTH_SECRET;
+  process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
