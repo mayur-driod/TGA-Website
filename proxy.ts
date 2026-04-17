@@ -1,15 +1,18 @@
 import { getToken } from "next-auth/jwt"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { AUTH_SECRET } from "@/lib/auth-secret"
 
 const PROTECTED_ROUTES = ["/dashboard", "/admin"]
+const authSecret =
+  process.env.AUTH_SECRET ??
+  process.env.NEXTAUTH_SECRET ??
+  (process.env.NODE_ENV !== "production" ? "dev-only-change-me-auth-secret" : undefined)
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
   const token = await getToken({
     req,
-    secret: AUTH_SECRET,
+    secret: authSecret,
   })
 
   const isLoggedIn = Boolean(token)

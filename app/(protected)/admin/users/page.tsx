@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
-import { Permissions } from "@/lib/permissions"
 import { RoleSelect } from "@/components/admin/RoleSelect"
 import { redirect } from "next/navigation"
 
@@ -11,7 +10,7 @@ export default async function AdminUsersPage() {
     redirect("/sign-in")
   }
 
-  if (!Permissions.canManageUsers(session.user.role)) {
+  if (session.user.role !== "ADMIN") {
     redirect("/sign-in?error=unauthorized")
   }
 
