@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 import { z } from "zod"
 
 import { CONTACT_EMAIL, SITE_NAME } from "@/lib/constants"
+import { rateLimit } from "@/lib/rate-limit"
 
 const contactSchema = z.object({
   name: z.string().trim().min(2).max(100),
@@ -10,6 +11,9 @@ const contactSchema = z.object({
   organization: z.string().trim().max(120).optional(),
   subject: z.string().trim().max(140).optional(),
   message: z.string().trim().min(10).max(5000),
+
+  // Honeypot field
+  website: z.string().optional(),
 })
 
 function escapeHtml(value: string) {
@@ -83,7 +87,9 @@ function buildContactHtml(input: {
       </tr>
       <tr>
         <td style="padding:0 24px 24px 24px;">
-          <a href="mailto:${safeEmail}?subject=Re:%20${encodeURIComponent(input.subject || "Your message to The Green Alliance")}" style="display:inline-block;padding:10px 14px;border-radius:8px;background:#3b6d11;color:#ffffff;text-decoration:none;font-size:13px;font-weight:600;">Reply to sender</a>
+          <a href="mailto:${safeEmail}?subject=Re:%20${encodeURIComponent(
+            input.subject || "Your message to The Green Alliance"
+          )}" style="display:inline-block;padding:10px 14px;border-radius:8px;background:#3b6d11;color:#ffffff;text-decoration:none;font-size:13px;font-weight:600;">Reply to sender</a>
           <p style="margin:10px 0 0 0;font-size:12px;color:#6b7280;">Tip: Reply-To is automatically set to the sender email.</p>
         </td>
       </tr>
@@ -114,7 +120,31 @@ function buildContactText(input: {
   ].join("\n")
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  /* ----------------------------- */
+  /* Rate Limiting                */
+  /* ----------------------------- */
+
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "anonymous"
+
+  const { success } = await rateLimit.limit(ip)
+
+  if (!success) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Too many messages sent. Please try again later.",
+      },
+      { status: 429 }
+    )
+  }
+
+  /* ----------------------------- */
+  /* Parse + Validate             */
+  /* ----------------------------- */
+
   const payload = await request.json().catch(() => null)
   const parsed = contactSchema.safeParse(payload)
 
@@ -123,6 +153,20 @@ export async function POST(request: Request) {
       {
         ok: false,
         message: "Please provide a valid name, email, and message.",
+      },
+      { status: 400 }
+    )
+  }
+
+  /* ----------------------------- */
+  /* Honeypot Check               */
+  /* ----------------------------- */
+
+  if (parsed.data.website?.trim()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Spam detected.",
       },
       { status: 400 }
     )
@@ -160,7 +204,8 @@ export async function POST(request: Request) {
     },
   })
 
-  const subjectSuffix = parsed.data.subject?.trim() || "Website contact message"
+  const subjectSuffix =
+    parsed.data.subject?.trim() || "Website contact message"
 
   try {
     await transporter.sendMail({
@@ -171,19 +216,28 @@ export async function POST(request: Request) {
         address: parsed.data.email,
       },
       subject: `[TGA Contact] ${subjectSuffix}`,
-      text: buildContactText({ ...parsed.data, submittedAt }),
-      html: buildContactHtml({ ...parsed.data, submittedAt }),
+      text: buildContactText({
+        ...parsed.data,
+        submittedAt,
+      }),
+      html: buildContactHtml({
+        ...parsed.data,
+        submittedAt,
+      }),
     })
 
-    return NextResponse.json({ ok: true, message: "Message sent successfully." })
+    return NextResponse.json({
+      ok: true,
+      message: "Message sent successfully.",
+    })
   } catch {
     return NextResponse.json(
       {
         ok: false,
-        message: "Unable to send your message at the moment. Please try again shortly.",
+        message:
+          "Unable to send your message at the moment. Please try again shortly.",
       },
       { status: 500 }
     )
   }
-
 }

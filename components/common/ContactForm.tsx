@@ -12,6 +12,7 @@ type ContactPayload = {
   organization: string
   subject: string
   message: string
+  website: string
 }
 
 const INITIAL_FORM: ContactPayload = {
@@ -20,6 +21,7 @@ const INITIAL_FORM: ContactPayload = {
   organization: "",
   subject: "",
   message: "",
+  website: "",
 }
 
 export default function ContactForm() {
@@ -159,6 +161,17 @@ export default function ContactForm() {
             maxLength={140}
             className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring"
             placeholder="Partnership, event invite, media, etc."
+          />
+        </div>
+          <div className="hidden">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            type="text"
+            value={form.website}
+            onChange={(e) => setField("website", e.target.value)}
+            autoComplete="off"
+            tabIndex={-1}
           />
         </div>
       </div>
