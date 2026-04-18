@@ -125,19 +125,44 @@ export async function POST(request: NextRequest) {
   /* Rate Limiting                */
   /* ----------------------------- */
 
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    "anonymous"
+  const forwardedIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+  const realIp = request.headers.get("x-real-ip")?.trim()
+  const cfConnectingIp = request.headers.get("cf-connecting-ip")?.trim()
+  const runtimeIp = (request as NextRequest & { ip?: string }).ip?.trim()
 
-  const { success } = await rateLimit.limit(ip)
+  const anonymousFingerprint = [
+    request.headers.get("user-agent")?.trim() || "unknown-agent",
+    request.headers.get("accept-language")?.trim() || "unknown-lang",
+  ]
+    .join("|")
+    .slice(0, 200)
+
+  const clientKey =
+    runtimeIp || forwardedIp || realIp || cfConnectingIp || `anonymous:${anonymousFingerprint}`
+
+  const { success, limit, remaining, reset } = await rateLimit.limit(clientKey)
+
+  const rateLimitHeaders = {
+    "X-RateLimit-Limit": limit.toString(),
+    "X-RateLimit-Remaining": remaining.toString(),
+    "X-RateLimit-Reset": reset.toString(),
+  }
 
   if (!success) {
+    const retryAfterSeconds = Math.max(1, Math.ceil((reset - Date.now()) / 1000))
+
     return NextResponse.json(
       {
         ok: false,
         message: "Too many messages sent. Please try again later.",
       },
-      { status: 429 }
+      {
+        status: 429,
+        headers: {
+          ...rateLimitHeaders,
+          "Retry-After": retryAfterSeconds.toString(),
+        },
+      }
     )
   }
 
@@ -154,7 +179,10 @@ export async function POST(request: NextRequest) {
         ok: false,
         message: "Please provide a valid name, email, and message.",
       },
-      { status: 400 }
+      {
+        status: 400,
+        headers: rateLimitHeaders,
+      }
     )
   }
 
@@ -168,7 +196,10 @@ export async function POST(request: NextRequest) {
         ok: false,
         message: "Spam detected.",
       },
-      { status: 400 }
+      {
+        status: 400,
+        headers: rateLimitHeaders,
+      }
     )
   }
 
@@ -184,7 +215,10 @@ export async function POST(request: NextRequest) {
         ok: false,
         message: "Contact email is not configured yet. Please try again later.",
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: rateLimitHeaders,
+      }
     )
   }
 
@@ -226,10 +260,13 @@ export async function POST(request: NextRequest) {
       }),
     })
 
-    return NextResponse.json({
-      ok: true,
-      message: "Message sent successfully.",
-    })
+    return NextResponse.json(
+      {
+        ok: true,
+        message: "Message sent successfully.",
+      },
+      { headers: rateLimitHeaders }
+    )
   } catch {
     return NextResponse.json(
       {
@@ -237,7 +274,10 @@ export async function POST(request: NextRequest) {
         message:
           "Unable to send your message at the moment. Please try again shortly.",
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: rateLimitHeaders,
+      }
     )
   }
 }
