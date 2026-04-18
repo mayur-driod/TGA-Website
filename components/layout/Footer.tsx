@@ -65,7 +65,7 @@ export default function Footer() {
       <div className="border-t border-border/60">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-4 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between md:px-8 lg:px-12">
           <p className="text-xs font-semibold text-foreground md:text-sm">
-            Made with <span className="text-red-500">❤</span> in INDIA by Mayur :)
+            Built with <span className="text-red-500">❤</span> in INDIA
           </p>
           <p>All rights reserved 2026 The Green Alliance RV University.</p>
         </div>
