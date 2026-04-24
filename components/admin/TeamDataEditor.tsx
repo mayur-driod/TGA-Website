@@ -23,7 +23,7 @@ const MEMBER_SECTIONS: Array<{ key: MemberSectionKey; label: string; idPrefix: s
   { key: "facultyMentors", label: "Faculty Mentors", idPrefix: "faculty" },
 ]
 
-const SOCIAL_OPTIONS: TeamSocialLink["platform"][] = ["linkedin", "instagram", "email", "website", "other"]
+const SOCIAL_OPTIONS: TeamSocialLink["platform"][] = ["linkedin", "x", "instagram", "email", "website", "other"]
 
 function cloneData(data: TeamHierarchyData): TeamHierarchyData {
   return JSON.parse(JSON.stringify(data)) as TeamHierarchyData

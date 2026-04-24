@@ -29,6 +29,7 @@ function normalizeSocial(value: unknown): TeamSocialLink | null {
 
   const platform =
     social.platform === "linkedin" ||
+    social.platform === "x" ||
     social.platform === "instagram" ||
     social.platform === "email" ||
     social.platform === "website" ||

@@ -67,7 +67,7 @@ export interface TeamMemberProfile {
 }
 
 export interface TeamSocialLink {
-  platform: "linkedin" | "instagram" | "email" | "website" | "other"
+  platform: "linkedin" | "x" | "instagram" | "email" | "website" | "other"
   url: string
 }
 
