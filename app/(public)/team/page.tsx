@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Compass, Leaf, Sparkles, Users } from "lucide-react"
 
 import CommitteeCard from "@/components/cards/CommitteeCard"
-import TeamCard from "@/components/cards/TeamCard"
+import TeamCard, { TeamCardTouchSelectionProvider } from "@/components/cards/TeamCard"
 // import AnimatedCounter from "@/components/common/AnimatedCounter"
 import PageHeader from "@/components/common/PageHeader"
 import SectionLabel from "@/components/common/SectionLabel"
@@ -95,85 +95,87 @@ export default async function TeamPage() {
         </div>
       </section>
 
-      <section
-        id="advisors"
-        role="region"
-        aria-label="Team members"
-        className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
-      >
-        <div className="mx-auto w-full max-w-7xl rounded-3xl border border-forest-100/70 bg-linear-to-b from-forest-50/65 via-background to-background p-4 md:p-6">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <SectionLabel className="text-forest-700">Student Advisors</SectionLabel>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                Senior guidance for the leadership team
-              </h2>
+      <TeamCardTouchSelectionProvider>
+        <section
+          id="advisors"
+          role="region"
+          aria-label="Team members"
+          className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
+        >
+          <div className="mx-auto w-full max-w-7xl rounded-3xl border border-forest-100/70 bg-linear-to-b from-forest-50/65 via-background to-background p-4 md:p-6">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <SectionLabel className="text-forest-700">Student Advisors</SectionLabel>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                  Senior guidance for the leadership team
+                </h2>
+              </div>
+              <Badge variant="secondary" className="border border-forest-200 bg-forest-100/70 text-forest-800">
+                <Sparkles className="size-3" aria-hidden />
+                {founderCount} founders across the team
+              </Badge>
             </div>
-            <Badge variant="secondary" className="border border-forest-200 bg-forest-100/70 text-forest-800">
-              <Sparkles className="size-3" aria-hidden />
-              {founderCount} founders across the team
-            </Badge>
+
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+              {team.studentAdvisors.map((member, index) => (
+                <TeamCard
+                  key={member.id}
+                  member={member}
+                  tone="advisor"
+                  revealIndex={index + 1}
+                  imageLoading={index < 4 ? "eager" : "lazy"}
+                />
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {team.studentAdvisors.map((member, index) => (
-              <TeamCard
-                key={member.id}
-                member={member}
-                tone="advisor"
-                revealIndex={index + 1}
-                imageLoading={index < 4 ? "eager" : "lazy"}
-              />
-            ))}
+        <section
+          id="leadership"
+          className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
+        >
+          <div className="mx-auto w-full max-w-7xl rounded-3xl border border-teal-100/70 bg-linear-to-b from-teal-50/60 via-secondary/15 to-background p-4 md:p-6">
+            <SectionLabel className="text-teal-700">Leadership Core</SectionLabel>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              Positions driving day-to-day momentum
+            </h2>
+
+            <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+              {team.leadershipCore.map((member, index) => (
+                <TeamCard
+                  key={member.id}
+                  member={member}
+                  tone="leadership"
+                  revealIndex={team.studentAdvisors.length + index + 1}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section
-        id="leadership"
-        className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
-      >
-        <div className="mx-auto w-full max-w-7xl rounded-3xl border border-teal-100/70 bg-linear-to-b from-teal-50/60 via-secondary/15 to-background p-4 md:p-6">
-          <SectionLabel className="text-teal-700">Leadership Core</SectionLabel>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-            Positions driving day-to-day momentum
-          </h2>
+        <section
+          id="faculty"
+          className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
+        >
+          <div className="mx-auto w-full max-w-7xl rounded-3xl border border-primary/15 bg-linear-to-b from-primary/6 via-secondary/20 to-background p-4 md:p-6">
+            <SectionLabel className="text-primary">Faculty Mentors</SectionLabel>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              Academic guidance behind our student energy
+            </h2>
 
-          <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {team.leadershipCore.map((member, index) => (
-              <TeamCard
-                key={member.id}
-                member={member}
-                tone="leadership"
-                revealIndex={team.studentAdvisors.length + index + 1}
-              />
-            ))}
+            <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+              {team.facultyMentors.map((member, index) => (
+                <TeamCard
+                  key={member.id}
+                  member={member}
+                  tone="faculty"
+                  revealIndex={team.studentAdvisors.length + team.leadershipCore.length + index + 1}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-
-      <section
-        id="faculty"
-        className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
-      >
-        <div className="mx-auto w-full max-w-7xl rounded-3xl border border-primary/15 bg-linear-to-b from-primary/6 via-secondary/20 to-background p-4 md:p-6">
-          <SectionLabel className="text-primary">Faculty Mentors</SectionLabel>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-            Academic guidance behind our student energy
-          </h2>
-
-          <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {team.facultyMentors.map((member, index) => (
-              <TeamCard
-                key={member.id}
-                member={member}
-                tone="faculty"
-                revealIndex={team.studentAdvisors.length + team.leadershipCore.length + index + 1}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </TeamCardTouchSelectionProvider>
 
       <section
         id="committees"

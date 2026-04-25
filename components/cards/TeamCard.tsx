@@ -1,13 +1,120 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useMemo, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react"
 import { Globe, Link2, Mail } from "lucide-react"
 import { FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 
 import { Badge } from "@/components/ui/badge"
 import useScrollAnimation from "@/hooks/useScrollAnimation"
 import type { TeamMemberProfile } from "@/lib/types"
+
+type TouchCardScore = { distanceToCenter: number; intersectionRatio: number }
+
+const TOUCH_SWITCH_DISTANCE_HYSTERESIS = 28
+const TOUCH_SWITCH_RATIO_HYSTERESIS = 0.08
+
+type TeamTouchSelectionContextValue = {
+  activeId: string | null
+  selectCard: (id: string) => void
+  updateScore: (id: string, score: TouchCardScore) => void
+  removeCard: (id: string) => void
+}
+
+const TeamTouchSelectionContext = createContext<TeamTouchSelectionContextValue | null>(null)
+
+export function TeamCardTouchSelectionProvider({ children }: { children: ReactNode }) {
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const scoreMapRef = useRef<Map<string, TouchCardScore>>(new Map())
+  const animationFrameRef = useRef<number | null>(null)
+
+  const pickFocusedCard = useCallback(() => {
+    let bestId: string | null = null
+    let bestDistance = Number.POSITIVE_INFINITY
+    let bestRatio = -1
+
+    for (const [id, score] of scoreMapRef.current.entries()) {
+      if (score.intersectionRatio <= 0) {
+        continue
+      }
+
+      if (score.distanceToCenter < bestDistance || (score.distanceToCenter === bestDistance && score.intersectionRatio > bestRatio)) {
+        bestId = id
+        bestDistance = score.distanceToCenter
+        bestRatio = score.intersectionRatio
+      }
+    }
+
+    if (!bestId) {
+      return
+    }
+
+    setActiveId((prev) => {
+      if (!prev || prev === bestId) {
+        return bestId
+      }
+
+      const current = scoreMapRef.current.get(prev)
+      const next = scoreMapRef.current.get(bestId)
+
+      if (!current || current.intersectionRatio <= 0 || !next) {
+        return bestId
+      }
+
+      const strongerDistanceLead = current.distanceToCenter - next.distanceToCenter > TOUCH_SWITCH_DISTANCE_HYSTERESIS
+      const strongerVisibilityLead =
+        next.intersectionRatio - current.intersectionRatio > TOUCH_SWITCH_RATIO_HYSTERESIS &&
+        next.distanceToCenter <= current.distanceToCenter
+
+      return strongerDistanceLead || strongerVisibilityLead ? bestId : prev
+    })
+  }, [])
+
+  const schedulePick = useCallback(() => {
+    if (typeof window === "undefined" || animationFrameRef.current !== null) {
+      return
+    }
+
+    animationFrameRef.current = window.requestAnimationFrame(() => {
+      animationFrameRef.current = null
+      pickFocusedCard()
+    })
+  }, [pickFocusedCard])
+
+  const selectCard = useCallback((id: string) => {
+    setActiveId((prev) => (prev === id ? prev : id))
+  }, [])
+
+  const updateScore = useCallback(
+    (id: string, score: TouchCardScore) => {
+      scoreMapRef.current.set(id, score)
+      schedulePick()
+    },
+    [schedulePick],
+  )
+
+  const removeCard = useCallback(
+    (id: string) => {
+      scoreMapRef.current.delete(id)
+      schedulePick()
+    },
+    [schedulePick],
+  )
+
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null && typeof window !== "undefined") {
+        window.cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
+  }, [])
+
+  return (
+    <TeamTouchSelectionContext.Provider value={{ activeId, selectCard, updateScore, removeCard }}>
+      {children}
+    </TeamTouchSelectionContext.Provider>
+  )
+}
 
 type TeamCardProps = {
   member: TeamMemberProfile
@@ -153,28 +260,82 @@ function SocialGlyph({ platform }: { platform: TeamMemberProfile["socials"][numb
 
 export default function TeamCard({ member, tone = "leadership", revealIndex = 0, imageLoading = "lazy" }: TeamCardProps) {
   const { ref, isVisible } = useScrollAnimation(0.18)
-  const [isTouchMode, setIsTouchMode] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
+  const touchSelectionContext = useContext(TeamTouchSelectionContext)
+  const cardSelectionId = useId()
+  const [isTouchViewport, setIsTouchViewport] = useState(false)
+  const [isTouchSelectedFallback, setIsTouchSelectedFallback] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     const pointerQuery = window.matchMedia("(hover: none), (pointer: coarse)")
+    const viewportQuery = window.matchMedia("(max-width: 1023px)")
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
 
-    const updatePointerMode = () => setIsTouchMode(pointerQuery.matches)
+    const updateInteractionMode = () => {
+      const useTouchSelection = pointerQuery.matches && viewportQuery.matches
+      setIsTouchViewport(useTouchSelection)
+
+      if (!useTouchSelection) {
+        setIsTouchSelectedFallback(false)
+      }
+    }
+
     const updateMotionMode = () => setPrefersReducedMotion(motionQuery.matches)
 
-    updatePointerMode()
+    updateInteractionMode()
     updateMotionMode()
 
-    pointerQuery.addEventListener("change", updatePointerMode)
+    pointerQuery.addEventListener("change", updateInteractionMode)
+    viewportQuery.addEventListener("change", updateInteractionMode)
     motionQuery.addEventListener("change", updateMotionMode)
 
     return () => {
-      pointerQuery.removeEventListener("change", updatePointerMode)
+      pointerQuery.removeEventListener("change", updateInteractionMode)
+      viewportQuery.removeEventListener("change", updateInteractionMode)
       motionQuery.removeEventListener("change", updateMotionMode)
     }
   }, [])
+
+  useEffect(() => {
+    if (!isTouchViewport || !ref.current || !touchSelectionContext) {
+      return
+    }
+
+    const thresholds = Array.from({ length: 21 }, (_, index) => index / 20)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0]
+        const cardCenterY = entry.boundingClientRect.top + entry.boundingClientRect.height / 2
+        const viewportCenterY = window.innerHeight / 2
+        const distanceToCenter = Math.abs(cardCenterY - viewportCenterY)
+
+        touchSelectionContext.updateScore(cardSelectionId, {
+          distanceToCenter,
+          intersectionRatio: entry.intersectionRatio,
+        })
+      },
+      {
+        threshold: thresholds,
+      },
+    )
+
+    observer.observe(ref.current)
+
+    return () => {
+      observer.disconnect()
+      touchSelectionContext.removeCard(cardSelectionId)
+    }
+  }, [cardSelectionId, isTouchViewport, ref, touchSelectionContext])
+
+  const selectCardOnTouchViewport = () => {
+    if (touchSelectionContext) {
+      touchSelectionContext.selectCard(cardSelectionId)
+      return
+    }
+
+    setIsTouchSelectedFallback(true)
+  }
 
   const portraitUrl =
     member.imageUrl ??
@@ -182,7 +343,7 @@ export default function TeamCard({ member, tone = "leadership", revealIndex = 0,
   const isRemotePortrait = /^https?:\/\//.test(portraitUrl)
   const visibleSocials = member.socials.slice(0, 5)
 
-  const shouldOpen = isTouchMode && isExpanded
+  const shouldOpen = isTouchViewport && (touchSelectionContext ? touchSelectionContext.activeId === cardSelectionId : isTouchSelectedFallback)
   const cardDelay = isVisible && !prefersReducedMotion ? `${revealIndex * 60}ms` : "0ms"
 
   const socialLinks = useMemo(
@@ -204,14 +365,19 @@ export default function TeamCard({ member, tone = "leadership", revealIndex = 0,
       data-state={interactionState}
       data-tone={tone}
       onClick={() => {
-        if (isTouchMode) {
-          setIsExpanded((prev) => !prev)
+        if (isTouchViewport) {
+          selectCardOnTouchViewport()
+        }
+      }}
+      onFocus={() => {
+        if (isTouchViewport) {
+          selectCardOnTouchViewport()
         }
       }}
       onKeyDown={(event) => {
-        if (isTouchMode && (event.key === "Enter" || event.key === " ")) {
+        if (isTouchViewport && (event.key === "Enter" || event.key === " ")) {
           event.preventDefault()
-          setIsExpanded((prev) => !prev)
+          selectCardOnTouchViewport()
         }
       }}
       className={`group/team relative isolate h-full cursor-pointer overflow-hidden rounded-2xl border border-border/70 bg-card text-card-foreground shadow-[0_18px_30px_-26px_rgba(0,0,0,0.55)] outline-none transition-[transform,border-color,box-shadow,opacity] duration-500 ease-out motion-reduce:transition-none ${
@@ -263,7 +429,7 @@ export default function TeamCard({ member, tone = "leadership", revealIndex = 0,
             <p className="mt-1 text-[0.8rem] text-muted-foreground">{member.role}</p>
           </div>
           <span className="mt-0.5 text-[10px] uppercase tracking-widest text-primary/75">
-            {isTouchMode ? (shouldOpen ? "Open" : "Tap") : "Hover"}
+            {isTouchViewport ? (shouldOpen ? "Open" : "Tap") : "Hover"}
           </span>
         </div>
 
@@ -296,7 +462,7 @@ export default function TeamCard({ member, tone = "leadership", revealIndex = 0,
                 rel={social.platform === "email" ? undefined : "noopener noreferrer"}
                 title={social.label}
                 onClick={(event) => {
-                  if (isTouchMode) {
+                  if (isTouchViewport) {
                     event.stopPropagation()
                   }
                 }}
@@ -313,9 +479,9 @@ export default function TeamCard({ member, tone = "leadership", revealIndex = 0,
         </div>
       </div>
 
-      {isTouchMode ? (
+      {isTouchViewport ? (
         <p className="absolute bottom-1.5 right-3 z-20 text-[10px] font-medium text-white/90 drop-shadow-sm">
-          {isExpanded ? "Tap to collapse" : "Tap to expand"}
+          {shouldOpen ? "Selected" : "Tap to select"}
         </p>
       ) : null}
     </article>
