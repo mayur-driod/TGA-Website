@@ -134,6 +134,8 @@ function normalizeTeamCommittee(value: unknown): TeamCommittee | null {
     name: committee.name,
     description: committee.description,
     focus: committee.focus,
+    imageUrl: isNullableString(committee.imageUrl) ? committee.imageUrl : null,
+    imagePublicId: isNullableString(committee.imagePublicId) ? committee.imagePublicId : null,
     leads: committee.leads,
     openRoles: committee.openRoles,
   }

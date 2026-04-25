@@ -1,16 +1,11 @@
 import Link from "next/link"
 import { Compass, Leaf, Sparkles, Users } from "lucide-react"
 
+import CommitteeCard from "@/components/cards/CommitteeCard"
 import TeamCard from "@/components/cards/TeamCard"
-import AnimatedCounter from "@/components/common/AnimatedCounter"
+// import AnimatedCounter from "@/components/common/AnimatedCounter"
 import PageHeader from "@/components/common/PageHeader"
 import SectionLabel from "@/components/common/SectionLabel"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { getTeamHierarchyData } from "@/lib/team-content"
@@ -27,14 +22,14 @@ const TEAM_SECTION_LINKS = [
     chipClass: "border-teal-200 bg-teal-50/75 text-teal-800 hover:bg-teal-100/80",
   },
   {
-    id: "committees",
-    label: "Committees",
-    chipClass: "border-amber-200 bg-amber-50/75 text-amber-800 hover:bg-amber-100/80",
-  },
-  {
     id: "faculty",
     label: "Faculty Mentors",
     chipClass: "border-primary/25 bg-primary/10 text-primary hover:bg-primary/15",
+  },
+  {
+    id: "committees",
+    label: "Committees",
+    chipClass: "border-amber-200 bg-amber-50/75 text-amber-800 hover:bg-amber-100/80",
   },
 ] as const
 
@@ -43,7 +38,7 @@ export default async function TeamPage() {
   const founderCount = [...team.studentAdvisors, ...team.leadershipCore, ...team.facultyMentors].filter(
     (member) => member.isFounder,
   ).length
-  const totalMembers = team.studentAdvisors.length + team.leadershipCore.length + team.facultyMentors.length
+  // const totalMembers = team.studentAdvisors.length + team.leadershipCore.length + team.facultyMentors.length
 
   return (
     <main className="relative overflow-hidden pb-4">
@@ -54,14 +49,13 @@ export default async function TeamPage() {
       </div>
 
       <PageHeader
-        badge="People & Purpose"
         title="The people behind the mission"
         subtitle="Meet our student advisors, leadership core, committees, and faculty mentors."
       />
 
       <section className="relative z-10 px-4 py-8 md:px-8 lg:px-12">
         <div className="mx-auto w-full max-w-7xl">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {/* <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-border bg-card/85 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm">
               <p className="text-xs uppercase tracking-widest text-muted-foreground">Total team</p>
               <p className="mt-2 text-2xl font-semibold text-foreground">
@@ -80,11 +74,11 @@ export default async function TeamPage() {
                 <AnimatedCounter value={team.committees.length} />
               </p>
             </div>
-          </div>
+          </div> */}
 
-          <div className="mt-5 h-px w-full bg-[linear-gradient(90deg,transparent_0%,rgba(59,109,17,0.55)_50%,transparent_100%)]" />
+          {/* <div className="mt-5 h-px w-full bg-[linear-gradient(90deg,transparent_0%,rgba(59,109,17,0.55)_50%,transparent_100%)]" /> */}
 
-          <div className="mt-5 rounded-xl border border-border/70 bg-background/80 p-2 shadow-sm backdrop-blur">
+          <div className="w-fit mt-5 rounded-xl border border-border/70 bg-background/80 p-2 shadow-sm backdrop-blur">
             <nav className="flex flex-wrap items-center gap-2">
               {TEAM_SECTION_LINKS.map((item) => (
                 <a
@@ -159,60 +153,6 @@ export default async function TeamPage() {
       </section>
 
       <section
-        id="committees"
-        className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
-      >
-        <div className="mx-auto w-full max-w-7xl rounded-3xl border border-amber-100/70 bg-linear-to-b from-amber-50/55 via-background to-background p-4 md:p-6">
-          <div className="mb-6">
-            <SectionLabel className="text-amber-700">Committees</SectionLabel>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-              Teams that convert strategy into action
-            </h2>
-          </div>
-
-          <Accordion type="multiple" className="space-y-3">
-            {team.committees.map((committee) => (
-              <AccordionItem key={committee.id} value={committee.id}>
-                <AccordionTrigger className="rounded-t-xl px-5 text-base transition-colors hover:bg-amber-50/60">
-                  <div className="pr-2">
-                    <p className="text-left font-semibold text-foreground">{committee.name}</p>
-                    <p className="mt-1 text-left text-xs font-normal text-amber-800/85">{committee.focus}</p>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 rounded-b-xl px-5 pb-5">
-                  <p className="text-sm leading-7 text-muted-foreground">{committee.description}</p>
-
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <div className="rounded-xl border border-amber-100 bg-amber-50/45 p-3 transition-all duration-300 hover:-translate-y-0.5">
-                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Leads</p>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {committee.leads.map((lead) => (
-                          <Badge key={`${committee.id}-${lead}`} variant="outline" className="border-amber-200 bg-background/85">
-                            {lead}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl border border-amber-100 bg-amber-50/45 p-3 transition-all duration-300 hover:-translate-y-0.5">
-                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">Open roles</p>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {committee.openRoles.map((role) => (
-                          <Badge key={`${committee.id}-${role}`} className="bg-amber-100 text-amber-900" variant="secondary">
-                            {role}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
-
-      <section
         id="faculty"
         className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
       >
@@ -230,6 +170,29 @@ export default async function TeamPage() {
                 tone="faculty"
                 revealIndex={team.studentAdvisors.length + team.leadershipCore.length + index + 1}
               />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="committees"
+        className="relative z-10 scroll-mt-28 px-4 py-6 md:px-8 lg:px-12"
+      >
+        <div className="mx-auto w-full max-w-7xl rounded-3xl border border-amber-100/70 bg-linear-to-b from-amber-50/55 via-background to-background p-4 md:p-6">
+          <div className="mb-6">
+            <SectionLabel className="text-amber-700">Committees</SectionLabel>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              Teams that convert strategy into action
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+              Hover over each committee card to reveal the work stream details, leads, and current open roles.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {team.committees.map((committee, index) => (
+              <CommitteeCard key={committee.id} committee={committee} revealIndex={index + 1} />
             ))}
           </div>
         </div>

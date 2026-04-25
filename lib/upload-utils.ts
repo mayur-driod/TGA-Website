@@ -150,3 +150,8 @@ export function buildTeamMemberPublicId(memberId: string, fallbackSlug: string) 
   const slug = sanitizeSegment(memberId) || sanitizeSegment(fallbackSlug) || "member"
   return `team/${slug}`
 }
+
+export function buildCommitteePublicId(committeeId: string, fallbackSlug: string) {
+  const slug = sanitizeSegment(committeeId) || sanitizeSegment(fallbackSlug) || "committee"
+  return `committee/${slug}`
+}

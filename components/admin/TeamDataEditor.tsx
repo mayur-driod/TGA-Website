@@ -6,7 +6,7 @@ import { Plus, Trash2 } from "lucide-react"
 import ImageUploadCard from "@/components/media/ImageUploadCard"
 import { Button } from "@/components/ui/button"
 import type { TeamCommittee, TeamHierarchyData, TeamMemberProfile, TeamSocialLink } from "@/lib/types"
-import { buildTeamMemberPublicId } from "@/lib/upload-utils"
+import { buildCommitteePublicId, buildTeamMemberPublicId } from "@/lib/upload-utils"
 
 type TeamApiResponse = {
   data?: TeamHierarchyData
@@ -57,6 +57,8 @@ function createCommittee(): TeamCommittee {
     name: "",
     description: "",
     focus: "",
+    imageUrl: null,
+    imagePublicId: null,
     leads: [],
     openRoles: [],
   }
@@ -481,6 +483,8 @@ export function TeamDataEditor({ initialData }: Props) {
             {formData.committees.map((committee, committeeIndex) => {
               const cardKey = getCommitteeCardKey(committee, committeeIndex)
               const isExpanded = Boolean(expandedCommittees[cardKey])
+              const resolvedCommitteePublicId =
+                committee.imagePublicId ?? buildCommitteePublicId(committee.id, `committee-${committeeIndex + 1}`)
 
               return (
                 <div key={cardKey} className="rounded-lg border border-border bg-card p-3">
@@ -530,6 +534,41 @@ export function TeamDataEditor({ initialData }: Props) {
                           onChange={(event) => updateCommittee(committeeIndex, "focus", event.target.value)}
                           className="h-9 rounded-md border border-input bg-background px-2 text-xs"
                           placeholder="Focus"
+                        />
+                      </div>
+
+                      <div className="mt-2 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+                        <input
+                          value={committee.imagePublicId ?? ""}
+                          onChange={(event) => updateCommittee(committeeIndex, "imagePublicId", event.target.value || null)}
+                          className="h-9 rounded-md border border-input bg-background px-2 text-xs"
+                          placeholder="Cloudinary public_id (optional)"
+                        />
+                        <input
+                          value={committee.imageUrl ?? ""}
+                          onChange={(event) => updateCommittee(committeeIndex, "imageUrl", event.target.value || null)}
+                          className="h-9 rounded-md border border-input bg-background px-2 text-xs md:col-span-2 xl:col-span-3"
+                          placeholder="Committee image URL (optional)"
+                        />
+                      </div>
+
+                      <div className="mt-3">
+                        <ImageUploadCard
+                          title="Committee Image"
+                          description="Upload an image that represents committee work"
+                          publicId={resolvedCommitteePublicId}
+                          currentImage={committee.imageUrl}
+                          folder="committee"
+                          aspect={1.6}
+                          size="compact"
+                          onSuccess={({ url, publicId }) => {
+                            updateCommittee(committeeIndex, "imageUrl", url)
+                            updateCommittee(committeeIndex, "imagePublicId", publicId)
+                          }}
+                          onDelete={() => {
+                            updateCommittee(committeeIndex, "imageUrl", null)
+                            updateCommittee(committeeIndex, "imagePublicId", null)
+                          }}
                         />
                       </div>
 

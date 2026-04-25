@@ -77,6 +77,8 @@ export interface TeamCommittee {
   name: string
   description: string
   focus: string
+  imageUrl?: string | null
+  imagePublicId?: string | null
   leads: string[]
   openRoles: string[]
 }
