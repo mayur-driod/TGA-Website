@@ -201,7 +201,6 @@ export default function TeamCard({ member, tone = "leadership", revealIndex = 0,
     <article
       ref={ref}
       tabIndex={0}
-      aria-expanded={shouldOpen}
       data-state={interactionState}
       data-tone={tone}
       onClick={() => {

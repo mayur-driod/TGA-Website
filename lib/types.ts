@@ -61,6 +61,7 @@ export interface TeamMemberProfile {
   bio: string
   avatar: string
   imageUrl?: string | null
+  imagePublicId?: string | null
   focusAreas: string[]
   socials: TeamSocialLink[]
   isFounder?: boolean

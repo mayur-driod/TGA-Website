@@ -105,6 +105,7 @@ function normalizeTeamMemberProfile(value: unknown): TeamMemberProfile | null {
     bio: profile.bio,
     avatar: profile.avatar,
     imageUrl: isNullableString(profile.imageUrl) ? profile.imageUrl : null,
+    imagePublicId: isNullableString(profile.imagePublicId) ? profile.imagePublicId : null,
     focusAreas: profile.focusAreas,
     socials: normalizeSocials(profile),
     isFounder: typeof profile.isFounder === "boolean" ? profile.isFounder : undefined,

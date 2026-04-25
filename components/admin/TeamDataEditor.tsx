@@ -3,8 +3,10 @@
 import { useState } from "react"
 import { Plus, Trash2 } from "lucide-react"
 
+import ImageUploadCard from "@/components/media/ImageUploadCard"
 import { Button } from "@/components/ui/button"
 import type { TeamCommittee, TeamHierarchyData, TeamMemberProfile, TeamSocialLink } from "@/lib/types"
+import { buildTeamMemberPublicId } from "@/lib/upload-utils"
 
 type TeamApiResponse = {
   data?: TeamHierarchyData
@@ -41,6 +43,7 @@ function createMember(idPrefix: string): TeamMemberProfile {
     bio: "",
     avatar: "",
     imageUrl: null,
+    imagePublicId: null,
     focusAreas: [],
     socials: [],
   }
@@ -255,6 +258,9 @@ export function TeamDataEditor({ initialData }: Props) {
                 (() => {
                   const cardKey = getMemberCardKey(section.key, member, memberIndex)
                   const isExpanded = Boolean(expandedMembers[cardKey])
+                  const resolvedPublicId =
+                    member.imagePublicId ??
+                    buildTeamMemberPublicId(member.id, `${section.idPrefix}-${memberIndex + 1}`)
 
                   return (
                     <div key={cardKey} className="rounded-lg border border-border bg-card p-3">
@@ -318,7 +324,7 @@ export function TeamDataEditor({ initialData }: Props) {
                             />
                           </div>
 
-                          <div className="mb-3 grid gap-2 md:grid-cols-3">
+                          <div className="mb-3 grid gap-2 md:grid-cols-2 xl:grid-cols-4">
                             <input
                               value={member.id}
                               onChange={(event) => updateMember(section.key, memberIndex, "id", event.target.value)}
@@ -332,10 +338,38 @@ export function TeamDataEditor({ initialData }: Props) {
                               placeholder="Avatar initials"
                             />
                             <input
+                              value={member.imagePublicId ?? ""}
+                              onChange={(event) =>
+                                updateMember(section.key, memberIndex, "imagePublicId", event.target.value || null)
+                              }
+                              className="h-9 rounded-md border border-input bg-background px-2 text-xs"
+                              placeholder="Cloudinary public_id (optional)"
+                            />
+                            <input
                               value={member.imageUrl ?? ""}
                               onChange={(event) => updateMember(section.key, memberIndex, "imageUrl", event.target.value || null)}
                               className="h-9 rounded-md border border-input bg-background px-2 text-xs"
-                              placeholder="Profile image URL"
+                              placeholder="Profile image URL (optional)"
+                            />
+                          </div>
+
+                          <div className="mb-3">
+                            <ImageUploadCard
+                              title="Profile Image"
+                              description="Upload leadership profile image"
+                              publicId={resolvedPublicId}
+                              currentImage={member.imageUrl}
+                              folder="team"
+                              aspect={1}
+                              size="compact"
+                              onSuccess={({ url, publicId }) => {
+                                updateMember(section.key, memberIndex, "imageUrl", url)
+                                updateMember(section.key, memberIndex, "imagePublicId", publicId)
+                              }}
+                              onDelete={() => {
+                                updateMember(section.key, memberIndex, "imageUrl", null)
+                                updateMember(section.key, memberIndex, "imagePublicId", null)
+                              }}
                             />
                           </div>
 

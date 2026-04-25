@@ -45,8 +45,6 @@ export default async function TeamPage() {
   ).length
   const totalMembers = team.studentAdvisors.length + team.leadershipCore.length + team.facultyMentors.length
 
-  let revealIndex = 0
-
   return (
     <main className="relative overflow-hidden pb-4">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -124,18 +122,15 @@ export default async function TeamPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {team.studentAdvisors.map((member, index) => {
-              revealIndex += 1
-              return (
-                <TeamCard
-                  key={member.id}
-                  member={member}
-                  tone="advisor"
-                  revealIndex={revealIndex}
-                  imageLoading={index < 4 ? "eager" : "lazy"}
-                />
-              )
-            })}
+            {team.studentAdvisors.map((member, index) => (
+              <TeamCard
+                key={member.id}
+                member={member}
+                tone="advisor"
+                revealIndex={index + 1}
+                imageLoading={index < 4 ? "eager" : "lazy"}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -151,10 +146,14 @@ export default async function TeamPage() {
           </h2>
 
           <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {team.leadershipCore.map((member) => {
-              revealIndex += 1
-              return <TeamCard key={member.id} member={member} tone="leadership" revealIndex={revealIndex} />
-            })}
+            {team.leadershipCore.map((member, index) => (
+              <TeamCard
+                key={member.id}
+                member={member}
+                tone="leadership"
+                revealIndex={team.studentAdvisors.length + index + 1}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -224,10 +223,14 @@ export default async function TeamPage() {
           </h2>
 
           <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {team.facultyMentors.map((member) => {
-              revealIndex += 1
-              return <TeamCard key={member.id} member={member} tone="faculty" revealIndex={revealIndex} />
-            })}
+            {team.facultyMentors.map((member, index) => (
+              <TeamCard
+                key={member.id}
+                member={member}
+                tone="faculty"
+                revealIndex={team.studentAdvisors.length + team.leadershipCore.length + index + 1}
+              />
+            ))}
           </div>
         </div>
       </section>
