@@ -27,6 +27,13 @@ const MEMBER_SECTIONS: Array<{ key: MemberSectionKey; label: string; idPrefix: s
 
 const SOCIAL_OPTIONS: TeamSocialLink["platform"][] = ["linkedin", "x", "instagram", "email", "website", "other"]
 
+function parseCommaSeparated(value: string) {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
 function cloneData(data: TeamHierarchyData): TeamHierarchyData {
   return JSON.parse(JSON.stringify(data)) as TeamHierarchyData
 }
@@ -68,15 +75,18 @@ export function TeamDataEditor({ initialData }: Props) {
   const [formData, setFormData] = useState<TeamHierarchyData>(cloneData(initialData))
   const [expandedMembers, setExpandedMembers] = useState<Record<string, boolean>>({})
   const [expandedCommittees, setExpandedCommittees] = useState<Record<string, boolean>>({})
+  const [memberFocusDrafts, setMemberFocusDrafts] = useState<Record<string, string>>({})
+  const [committeeLeadsDrafts, setCommitteeLeadsDrafts] = useState<Record<string, string>>({})
+  const [committeeOpenRolesDrafts, setCommitteeOpenRolesDrafts] = useState<Record<string, string>>({})
   const [isSaving, setIsSaving] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [messageType, setMessageType] = useState<"idle" | "success" | "error">("idle")
 
-  const getMemberCardKey = (section: MemberSectionKey, member: TeamMemberProfile, memberIndex: number) =>
-    `${section}-${member.id || memberIndex}`
+  const getMemberCardKey = (section: MemberSectionKey, _member: TeamMemberProfile, memberIndex: number) =>
+    `${section}-${memberIndex}`
 
-  const getCommitteeCardKey = (committee: TeamCommittee, committeeIndex: number) =>
-    `${committee.id || "committee"}-${committeeIndex}`
+  const getCommitteeCardKey = (_committee: TeamCommittee, committeeIndex: number) =>
+    `committee-${committeeIndex}`
 
   const resetMessage = () => {
     setMessage(null)
@@ -100,6 +110,9 @@ export function TeamDataEditor({ initialData }: Props) {
     }
 
     setFormData(cloneData(payload.data))
+    setMemberFocusDrafts({})
+    setCommitteeLeadsDrafts({})
+    setCommitteeOpenRolesDrafts({})
     setMessageType("success")
     setMessage("Loaded latest data from database")
   }
@@ -127,6 +140,9 @@ export function TeamDataEditor({ initialData }: Props) {
       }
 
       setFormData(cloneData(payload.data))
+      setMemberFocusDrafts({})
+      setCommitteeLeadsDrafts({})
+      setCommitteeOpenRolesDrafts({})
       setMessageType("success")
       setMessage("Team data saved to database")
     } finally {
@@ -173,6 +189,7 @@ export function TeamDataEditor({ initialData }: Props) {
 
       const cardKey = getMemberCardKey(section, created, next[section].length - 1)
       setExpandedMembers((expandedPrev) => ({ ...expandedPrev, [cardKey]: true }))
+      setMemberFocusDrafts({})
 
       return next
     })
@@ -182,6 +199,7 @@ export function TeamDataEditor({ initialData }: Props) {
     setFormData((prev) => {
       const next = cloneData(prev)
       next[section].splice(memberIndex, 1)
+      setMemberFocusDrafts({})
       return next
     })
   }
@@ -222,6 +240,8 @@ export function TeamDataEditor({ initialData }: Props) {
 
       const cardKey = getCommitteeCardKey(created, next.committees.length - 1)
       setExpandedCommittees((expandedPrev) => ({ ...expandedPrev, [cardKey]: true }))
+      setCommitteeLeadsDrafts({})
+      setCommitteeOpenRolesDrafts({})
 
       return next
     })
@@ -231,6 +251,8 @@ export function TeamDataEditor({ initialData }: Props) {
     setFormData((prev) => {
       const next = cloneData(prev)
       next.committees.splice(committeeIndex, 1)
+      setCommitteeLeadsDrafts({})
+      setCommitteeOpenRolesDrafts({})
       return next
     })
   }
@@ -260,6 +282,7 @@ export function TeamDataEditor({ initialData }: Props) {
                 (() => {
                   const cardKey = getMemberCardKey(section.key, member, memberIndex)
                   const isExpanded = Boolean(expandedMembers[cardKey])
+                  const focusAreasKey = `${cardKey}-focusAreas`
                   const resolvedPublicId =
                     member.imagePublicId ??
                     buildTeamMemberPublicId(member.id, `${section.idPrefix}-${memberIndex + 1}`)
@@ -384,18 +407,16 @@ export function TeamDataEditor({ initialData }: Props) {
 
                           <div className="mt-2 grid gap-2 md:grid-cols-2">
                             <input
-                              value={member.focusAreas.join(", ")}
-                              onChange={(event) =>
-                                updateMember(
-                                  section.key,
-                                  memberIndex,
-                                  "focusAreas",
-                                  event.target.value
-                                    .split(",")
-                                    .map((item) => item.trim())
-                                    .filter(Boolean),
-                                )
-                              }
+                              value={memberFocusDrafts[focusAreasKey] ?? member.focusAreas.join(", ")}
+                              onChange={(event) => {
+                                const nextValue = event.target.value
+                                setMemberFocusDrafts((prev) => ({ ...prev, [focusAreasKey]: nextValue }))
+                                updateMember(section.key, memberIndex, "focusAreas", parseCommaSeparated(nextValue))
+                              }}
+                              onBlur={(event) => {
+                                const normalized = parseCommaSeparated(event.target.value).join(", ")
+                                setMemberFocusDrafts((prev) => ({ ...prev, [focusAreasKey]: normalized }))
+                              }}
                               className="h-9 rounded-md border border-input bg-background px-2 text-xs"
                               placeholder="Focus areas (comma separated)"
                             />
@@ -483,6 +504,8 @@ export function TeamDataEditor({ initialData }: Props) {
             {formData.committees.map((committee, committeeIndex) => {
               const cardKey = getCommitteeCardKey(committee, committeeIndex)
               const isExpanded = Boolean(expandedCommittees[cardKey])
+              const committeeLeadsKey = `${cardKey}-leads`
+              const committeeOpenRolesKey = `${cardKey}-openRoles`
               const resolvedCommitteePublicId =
                 committee.imagePublicId ?? buildCommitteePublicId(committee.id, `committee-${committeeIndex + 1}`)
 
@@ -581,33 +604,31 @@ export function TeamDataEditor({ initialData }: Props) {
 
                       <div className="mt-2 grid gap-2 md:grid-cols-2">
                         <input
-                          value={committee.leads.join(", ")}
-                          onChange={(event) =>
-                            updateCommittee(
-                              committeeIndex,
-                              "leads",
-                              event.target.value
-                                .split(",")
-                                .map((item) => item.trim())
-                                .filter(Boolean),
-                            )
-                          }
+                          value={committeeLeadsDrafts[committeeLeadsKey] ?? committee.leads.join(", ")}
+                          onChange={(event) => {
+                            const nextValue = event.target.value
+                            setCommitteeLeadsDrafts((prev) => ({ ...prev, [committeeLeadsKey]: nextValue }))
+                            updateCommittee(committeeIndex, "leads", parseCommaSeparated(nextValue))
+                          }}
+                          onBlur={(event) => {
+                            const normalized = parseCommaSeparated(event.target.value).join(", ")
+                            setCommitteeLeadsDrafts((prev) => ({ ...prev, [committeeLeadsKey]: normalized }))
+                          }}
                           className="h-9 rounded-md border border-input bg-background px-2 text-xs"
                           placeholder="Leads (comma separated)"
                         />
 
                         <input
-                          value={committee.openRoles.join(", ")}
-                          onChange={(event) =>
-                            updateCommittee(
-                              committeeIndex,
-                              "openRoles",
-                              event.target.value
-                                .split(",")
-                                .map((item) => item.trim())
-                                .filter(Boolean),
-                            )
-                          }
+                          value={committeeOpenRolesDrafts[committeeOpenRolesKey] ?? committee.openRoles.join(", ")}
+                          onChange={(event) => {
+                            const nextValue = event.target.value
+                            setCommitteeOpenRolesDrafts((prev) => ({ ...prev, [committeeOpenRolesKey]: nextValue }))
+                            updateCommittee(committeeIndex, "openRoles", parseCommaSeparated(nextValue))
+                          }}
+                          onBlur={(event) => {
+                            const normalized = parseCommaSeparated(event.target.value).join(", ")
+                            setCommitteeOpenRolesDrafts((prev) => ({ ...prev, [committeeOpenRolesKey]: normalized }))
+                          }}
                           className="h-9 rounded-md border border-input bg-background px-2 text-xs"
                           placeholder="Open roles (comma separated)"
                         />
