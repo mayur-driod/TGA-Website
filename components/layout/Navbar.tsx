@@ -146,7 +146,7 @@ export default function Navbar() {
                 <Link href="/sign-in">Sign in</Link>
               </Button>
               <Button asChild>
-                <Link href="/sign-in">Join TGA</Link>
+                <Link href="/sign-up">Join TGA</Link>
               </Button>
             </>
           )}
