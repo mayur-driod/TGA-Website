@@ -183,7 +183,11 @@ green-alliance/
 
 ## 📸 Screenshots
 
-> *Coming soon — add screenshots of the globe, dashboard, blog, and events pages here.*
+<img width="1470" height="883" alt="Screenshot 2026-04-27 at 10 45 50 AM" src="https://github.com/user-attachments/assets/bfb7c69d-be7e-4058-b6e3-bfb8ba304ff9" />
+<img width="1470" height="927" alt="Screenshot 2026-04-27 at 10 47 21 AM" src="https://github.com/user-attachments/assets/ae5df2a1-f854-473b-910b-fc8b0d527fb5" />
+<img width="1470" height="629" alt="Screenshot 2026-04-27 at 10 46 14 AM" src="https://github.com/user-attachments/assets/f809b6f7-a486-49e5-a798-85a019a3cb14" />
+
+
 
 ---
 
