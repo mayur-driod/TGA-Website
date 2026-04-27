@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 const ERRORS: Record<string, string> = {
   unauthorized: "You do not have permission to access that page.",
   OAuthSignin: "There was a problem signing in. Please try again.",
+  AccountNotFound: "No account found for this email. Please sign up first.",
   missing_email: "An email address is required to sign in.",
   missing_email_internal: "An email address is required to sign in.",
   missingemail: "An email address is required to sign in.",
@@ -37,6 +38,7 @@ function mapError(error?: string | null) {
 export default function SignInPage() {
   const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
+  const [localError, setLocalError] = useState<string | null>(null)
   const [emailSent, setEmailSent] = useState<string | null>(null)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [isEmailLoading, setIsEmailLoading] = useState(false)
@@ -53,20 +55,30 @@ export default function SignInPage() {
   const handleMagicLink = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setIsEmailLoading(true)
+    setLocalError(null)
+
+    const normalizedEmail = email.trim().toLowerCase()
+
+    if (!normalizedEmail) {
+      setLocalError(ERRORS.missing_email)
+      setIsEmailLoading(false)
+      return
+    }
 
     const result = await signIn("nodemailer", {
-      email,
+      email: normalizedEmail,
       callbackUrl,
       redirect: false,
     })
 
     if (result?.error) {
+      setLocalError(mapError(result.error))
       setEmailSent(null)
       setIsEmailLoading(false)
       return
     }
 
-    setEmailSent(email)
+    setEmailSent(normalizedEmail)
     setIsEmailLoading(false)
   }
 
@@ -87,9 +99,9 @@ export default function SignInPage() {
         Sign in with Google or request a secure magic link by email.
       </p>
 
-      {errorMessage ? (
+      {localError || errorMessage ? (
         <p className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {errorMessage}
+          {localError ?? errorMessage}
         </p>
       ) : null}
 

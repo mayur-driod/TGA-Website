@@ -42,12 +42,44 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		}),
 	],
 	callbacks: {
-		async signIn({ user }) {
+		async signIn({ user, account, email }) {
 			if (!user.email) {
 				return "/sign-in?error=missing-email"
 			}
 
-			user.email = user.email.toLowerCase()
+			const normalizedEmail = user.email.toLowerCase()
+			user.email = normalizedEmail
+
+			if (account?.provider === "nodemailer" && email?.verificationRequest) {
+				const existingUser = await db.user.findUnique({
+					where: { email: normalizedEmail },
+					select: { id: true },
+				})
+
+				if (!existingUser) {
+					return "/sign-in?error=AccountNotFound"
+				}
+
+				await db.account.upsert({
+					where: {
+						provider_providerAccountId: {
+							provider: "nodemailer",
+							providerAccountId: normalizedEmail,
+						},
+					},
+					update: {
+						userId: existingUser.id,
+						type: "email",
+					},
+					create: {
+						userId: existingUser.id,
+						type: "email",
+						provider: "nodemailer",
+						providerAccountId: normalizedEmail,
+					},
+				})
+			}
+
 			return true
 		},
 		async jwt({ token }) {
