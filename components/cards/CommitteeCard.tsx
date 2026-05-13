@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import type { TeamCommittee } from "@/lib/types"
 
@@ -61,58 +61,102 @@ function DotGrid() {
 export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeCardProps) {
   const [hovered, setHovered] = useState(false)
   const [flipped, setFlipped] = useState(false)
+  const [mobileFlipped, setMobileFlipped] = useState(false)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const hasBannerImage = Boolean(committee.imageUrl)
 
   const animDelay = `${revealIndex * 80}ms`
 
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)")
+    const update = () => setIsSmallScreen(media.matches)
+    update()
+    media.addEventListener("change", update)
+    return () => media.removeEventListener("change", update)
+  }, [])
+
+  useEffect(() => {
+    if (!isSmallScreen) {
+      setMobileFlipped(false)
+    }
+  }, [isSmallScreen])
+
   // ─── Mobile Card ──────────────────────────────────────────────────────────
   const MobileCard = (
     <article
-      className="md:hidden rounded-[1.25rem] overflow-hidden border border-[#2d5a27]/20 bg-[#0f1f0d] shadow-[0_24px_48px_-16px_rgba(0,0,0,0.6)]"
-      style={{ animationDelay: animDelay }}
+      className="md:hidden cursor-pointer"
+      style={{ animationDelay: animDelay, perspective: "1000px" }}
+      tabIndex={0}
+      onClick={() => setMobileFlipped((prev) => !prev)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault()
+          setMobileFlipped((prev) => !prev)
+        }
+      }}
     >
-      {/* Image strip */}
-      <div className="relative aspect-[5/3] overflow-hidden">
-        {hasBannerImage ? (
-          <Image
-            src={committee.imageUrl!}
-            alt={`${committee.name} activity`}
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a3d16] via-[#143011] to-[#0a1a08]">
-            <LeafDecor className="absolute right-4 top-2 h-24 w-16 text-[#4a9e3f] opacity-60" />
-            <LeafDecor className="absolute -left-4 bottom-0 h-20 w-12 text-[#3d8533] opacity-40 rotate-45" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a08]/90 via-[#0a1a08]/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 p-4">
-          <span className="inline-block rounded-full border border-[#4a9e3f]/40 bg-[#1a3d16]/70 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#7ec87a] backdrop-blur-sm">
-            Committee
-          </span>
-          <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white">{committee.name}</h3>
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="relative overflow-hidden p-4">
-        <DotGrid />
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7ec87a]">{committee.focus}</p>
-        <p className="text-sm leading-6 text-[#a0b89d]">{committee.description}</p>
-        <div className="mt-3 border-t border-[#2d5a27]/30 pt-3">
-          <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#5a7a56]">Leads</p>
-          <div className="flex flex-wrap gap-1.5">
-            {committee.leads.map((lead) => (
-              <span
-                key={`${committee.id}-${lead}`}
-                className="rounded-full border border-[#4a9e3f]/35 bg-[#1a3d16]/60 px-2.5 py-0.5 text-[11px] font-medium text-[#7ec87a]"
-              >
-                {lead}
+      <div
+        className="relative h-full w-full transition-transform duration-700"
+        style={{ transformStyle: "preserve-3d", transform: mobileFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+      >
+        <div
+          className="absolute inset-0 overflow-hidden rounded-[1.25rem] border border-[#2d5a27]/20 bg-[#0f1f0d] shadow-[0_24px_48px_-16px_rgba(0,0,0,0.6)]"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          {/* Image strip */}
+          <div className="relative aspect-[5/3] overflow-hidden">
+            {hasBannerImage ? (
+              <Image
+                src={committee.imageUrl!}
+                alt={`${committee.name} activity`}
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1a3d16] via-[#143011] to-[#0a1a08]">
+                <LeafDecor className="absolute right-4 top-2 h-24 w-16 text-[#4a9e3f] opacity-60" />
+                <LeafDecor className="absolute -left-4 bottom-0 h-20 w-12 text-[#3d8533] opacity-40 rotate-45" />
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a08]/90 via-[#0a1a08]/20 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-4">
+              <span className="inline-block rounded-full border border-[#4a9e3f]/40 bg-[#1a3d16]/70 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#7ec87a] backdrop-blur-sm">
+                Committee
               </span>
-            ))}
+              <h3 className="mt-2 font-serif text-xl font-bold leading-tight text-white">{committee.name}</h3>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="relative overflow-hidden p-4">
+            <DotGrid />
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7ec87a]">{committee.focus}</p>
+            <p className="text-sm leading-6 text-[#a0b89d]">{committee.description}</p>
+          </div>
+        </div>
+
+        <div
+          className="absolute inset-0 overflow-hidden rounded-[1.25rem] border border-[#2d5a27]/20 bg-[#0c170a] shadow-[0_24px_48px_-16px_rgba(0,0,0,0.6)]"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(126,200,122,0.12)_1px,transparent_1px)] bg-[length:14px_14px] opacity-60" />
+          <div className="relative h-full p-4">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7ec87a]">
+              Committee leads
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {committee.leads.map((lead) => (
+                <span
+                  key={`${committee.id}-${lead}`}
+                  className="rounded-full border border-[#4a9e3f]/35 bg-[#1a3d16]/60 px-2.5 py-0.5 text-[11px] font-medium text-[#7ec87a]"
+                >
+                  {lead}
+                </span>
+              ))}
+            </div>
+            <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-[#5a7a56]">Tap to flip back</p>
           </div>
         </div>
       </div>
@@ -124,9 +168,23 @@ export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeC
   <article
     ref={cardRef}
     tabIndex={0}
-    onClick={() => setFlipped((f) => !f)}
+    onMouseEnter={() => {
+      if (!isSmallScreen) setFlipped(true)
+    }}
+    onMouseLeave={() => {
+      if (!isSmallScreen) setFlipped(false)
+    }}
+    onFocus={() => {
+      if (!isSmallScreen) setFlipped(true)
+    }}
+    onBlur={() => {
+      if (!isSmallScreen) setFlipped(false)
+    }}
+    onClick={() => {
+      if (isSmallScreen) setFlipped((f) => !f)
+    }}
     onKeyDown={(e) => {
-      if (e.key === "Enter" || e.key === " ") setFlipped((f) => !f)
+      if (isSmallScreen && (e.key === "Enter" || e.key === " ")) setFlipped((f) => !f)
     }}
     className="hidden md:block cursor-pointer"
     style={{
