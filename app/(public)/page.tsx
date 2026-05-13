@@ -1,4 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection"
+import SplashScreen from "@/components/common/SplashScreen"
 import StatsBar from "@/components/sections/StatsBar"
 import ActivitiesGrid from "@/components/sections/ActivitiesGrid"
 import EventsPreview from "@/components/sections/EventsPreview"
@@ -10,6 +11,7 @@ import JoinSection from "@/components/sections/JoinSection"
 export default function PublicHomePage() {
 	return (
 		<>
+			<SplashScreen />
 			<HeroSection />
 			<StatsBar />
 			<ActivitiesGrid />

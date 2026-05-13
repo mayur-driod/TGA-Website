@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import useScrollAnimation from "@/hooks/useScrollAnimation"
+import { SPLASH_DONE_EVENT } from "@/lib/constants"
 
 type AnimatedCounterProps = {
   value: number
@@ -16,25 +17,51 @@ export default function AnimatedCounter({
 }: AnimatedCounterProps) {
   const { ref, isVisible } = useScrollAnimation()
   const [count, setCount] = useState(0)
+  const [isSplashDone, setIsSplashDone] = useState(() =>
+    typeof window !== "undefined"
+      ? (window as Window & { __tgaSplashDone?: boolean }).__tgaSplashDone === true
+      : false
+  )
+  const hasAnimatedRef = useRef(false)
 
   useEffect(() => {
-    if (!isVisible) return
+    const handleSplashDone = () => setIsSplashDone(true)
+
+    window.addEventListener(SPLASH_DONE_EVENT, handleSplashDone)
+
+    return () => {
+      window.removeEventListener(SPLASH_DONE_EVENT, handleSplashDone)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isVisible || !isSplashDone || hasAnimatedRef.current) return
 
     let frame = 0
-    const start = performance.now()
-    const easeOut = (t: number) => 1 - (1 - t) ** 3
+    let delayTimer = 0
+    const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - 2 ** (-10 * t))
 
-    const tick = (time: number) => {
-      const progress = Math.min((time - start) / duration, 1)
-      setCount(Math.round(value * easeOut(progress)))
-      if (progress < 1) {
-        frame = requestAnimationFrame(tick)
+    const startAnimation = () => {
+      const start = performance.now()
+      hasAnimatedRef.current = true
+
+      const tick = (time: number) => {
+        const progress = Math.min((time - start) / duration, 1)
+        setCount(Math.round(value * easeOutExpo(progress)))
+        if (progress < 1) {
+          frame = requestAnimationFrame(tick)
+        }
       }
+
+      frame = requestAnimationFrame(tick)
     }
 
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [duration, isVisible, value])
+    delayTimer = window.setTimeout(startAnimation, 180)
+    return () => {
+      window.clearTimeout(delayTimer)
+      cancelAnimationFrame(frame)
+    }
+  }, [duration, isSplashDone, isVisible, value])
 
   const label = useMemo(() => `${count}${suffix}`, [count, suffix])
 

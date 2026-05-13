@@ -24,7 +24,7 @@ import {
 } from "lucide-react"
 import type { GlobeMethods, GlobeProps } from "react-globe.gl"
 import { Button } from "@/components/ui/button"
-import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants"
+import { GLOBE_READY_EVENT, SITE_NAME, SITE_TAGLINE, SPLASH_DONE_EVENT } from "@/lib/constants"
 
 type HeroRing = {
   lat: number
@@ -153,6 +153,7 @@ Globe.displayName = "Globe"
 function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
   const globeRef = useRef<GlobeMethods | null>(null)
   const globeContainerRef = useRef<HTMLDivElement | null>(null)
+  const globeReadyNotifiedRef = useRef(false)
   const [globeSize, setGlobeSize] = useState(320)
   const [activeLocation, setActiveLocation] = useState<HeroLocation>(HERO_LOCATIONS[0])
   const [landPolygons, setLandPolygons] = useState<LandPolygonDatum[]>([])
@@ -294,6 +295,17 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
     controls.autoRotateSpeed = 1.8
   }, [shouldReduceMotion])
 
+  const notifyGlobeReady = useCallback(() => {
+    if (globeReadyNotifiedRef.current || typeof window === "undefined") return
+    globeReadyNotifiedRef.current = true
+    window.dispatchEvent(new Event(GLOBE_READY_EVENT))
+  }, [])
+
+  const handleGlobeReady = useCallback(() => {
+    configureGlobe()
+    notifyGlobeReady()
+  }, [configureGlobe, notifyGlobeReady])
+
   useEffect(() => {
     configureGlobe()
   }, [globeSize, configureGlobe])
@@ -307,7 +319,7 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
         <div className="relative overflow-hidden rounded-full border border-primary/20 shadow-2xl">
           <Globe
             ref={globeRef}
-            onGlobeReady={configureGlobe}
+            onGlobeReady={handleGlobeReady}
             width={globeSize}
             height={globeSize}
             backgroundColor="rgba(0,0,0,0)"
@@ -404,6 +416,23 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
 
 export default function HeroSection() {
   const shouldReduceMotion = useReducedMotion()
+  const [isSplashDone, setIsSplashDone] = useState(() =>
+    typeof window !== "undefined"
+      ? (window as Window & { __tgaSplashDone?: boolean }).__tgaSplashDone === true
+      : false
+  )
+
+  useEffect(() => {
+    const handleSplashDone = () => setIsSplashDone(true)
+
+    window.addEventListener(SPLASH_DONE_EVENT, handleSplashDone)
+
+    return () => {
+      window.removeEventListener(SPLASH_DONE_EVENT, handleSplashDone)
+    }
+  }, [])
+
+  const shouldAnimateIn = isSplashDone
 
   return (
     <section className="relative overflow-hidden px-4 py-16 md:px-8 md:py-20 lg:px-12 lg:py-24">
@@ -418,8 +447,12 @@ export default function HeroSection() {
       <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          animate={shouldAnimateIn ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: 0.6, ease: "easeOut", delay: shouldAnimateIn ? 0.05 : 0 }
+          }
           className="space-y-6"
         >
           <p className="inline-flex items-center gap-2 rounded-full border border-border bg-background/80 px-3 py-1 text-xs font-medium text-foreground">
@@ -450,8 +483,12 @@ export default function HeroSection() {
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : 0.2, ease: "easeOut" }}
+          animate={shouldAnimateIn ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: 0.6, delay: shouldAnimateIn ? 0.18 : 0, ease: "easeOut" }
+          }
           className="grid w-full min-h-75 place-items-center sm:min-h-85"
         >
           <GlobeVisual shouldReduceMotion={!!shouldReduceMotion} />
