@@ -30,6 +30,7 @@ export default function SplashScreen() {
   const [progress, setProgress] = useState(0)
   const readyTimerRef = useRef<number | null>(null)
   const startTimeRef = useRef(0)
+  const progressRef = useRef(0)
 
   const statusLabel = useMemo(() => {
     const stage = [...LOADING_STAGES].reverse().find((item) => progress >= item.at)
@@ -63,9 +64,13 @@ export default function SplashScreen() {
   }, [])
 
   useEffect(() => {
+    progressRef.current = progress
+  }, [progress])
+
+  useEffect(() => {
     let raf = 0
     const start = performance.now()
-    const from = progress
+    const from = progressRef.current
     const target = isReady ? 100 : HOLD_PROGRESS
     const duration = isReady ? COMPLETE_PROGRESS_DURATION_MS : BASE_PROGRESS_DURATION_MS
 
@@ -73,6 +78,7 @@ export default function SplashScreen() {
       const elapsed = Math.min((now - start) / duration, 1)
       const eased = elapsed < 0.5 ? 2 * elapsed * elapsed : -1 + (4 - 2 * elapsed) * elapsed
       const next = Math.round(from + (target - from) * eased)
+      progressRef.current = next
       setProgress(next)
 
       if (elapsed < 1) {

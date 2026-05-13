@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
-import { Badge } from "@/components/ui/badge"
 import type { TeamCommittee } from "@/lib/types"
 
 type CommitteeCardProps = {
@@ -59,7 +58,6 @@ function DotGrid() {
 }
 
 export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeCardProps) {
-  const [hovered, setHovered] = useState(false)
   const [flipped, setFlipped] = useState(false)
   const [mobileFlipped, setMobileFlipped] = useState(false)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
@@ -76,11 +74,7 @@ export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeC
     return () => media.removeEventListener("change", update)
   }, [])
 
-  useEffect(() => {
-    if (!isSmallScreen) {
-      setMobileFlipped(false)
-    }
-  }, [isSmallScreen])
+  const isMobileFlipActive = isSmallScreen && mobileFlipped
 
   // ─── Mobile Card ──────────────────────────────────────────────────────────
   const MobileCard = (
@@ -98,7 +92,7 @@ export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeC
     >
       <div
         className="relative h-full w-full transition-transform duration-700"
-        style={{ transformStyle: "preserve-3d", transform: mobileFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+        style={{ transformStyle: "preserve-3d", transform: isMobileFlipActive ? "rotateY(180deg)" : "rotateY(0deg)" }}
       >
         <div
           className="absolute inset-0 overflow-hidden rounded-[1.25rem] border border-[#2d5a27]/20 bg-[#0f1f0d] shadow-[0_24px_48px_-16px_rgba(0,0,0,0.6)]"
