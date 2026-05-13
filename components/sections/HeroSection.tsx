@@ -284,7 +284,8 @@ function GlobeVisual({ shouldReduceMotion }: { shouldReduceMotion: boolean }) {
     const controls = globe.controls()
 
     controls.enablePan = false
-    controls.enableZoom = true
+    controls.enableZoom = false
+    controls.enableRotate = true
     controls.enableDamping = true
     controls.dampingFactor = 0.08
     controls.minDistance = 180
