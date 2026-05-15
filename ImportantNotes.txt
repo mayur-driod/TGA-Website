@@ -1,2 +1,0 @@
-Running the postgresql server on the local device. I am on a mac device and am currently
-just using HomeBrew and postgresql server from that. It can also be run using docker and the postgresql server itself.

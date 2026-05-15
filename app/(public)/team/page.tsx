@@ -193,8 +193,8 @@ export default async function TeamPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {team.committees.map((committee, index) => (
-              <CommitteeCard key={committee.id} committee={committee} revealIndex={index + 1} />
+            {team.committees.map((committee) => (
+              <CommitteeCard key={committee.id} committee={committee} />
             ))}
           </div>
         </div>

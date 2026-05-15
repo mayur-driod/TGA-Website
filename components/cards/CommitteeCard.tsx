@@ -1,12 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import type { TeamCommittee } from "@/lib/types"
 
 type CommitteeCardProps = {
   committee: TeamCommittee
-  revealIndex?: number
 }
 
 // Botanical SVG leaf decoration
@@ -42,29 +41,28 @@ function LeafDecor({ className }: { className?: string }) {
 
 // Dot-grid texture SVG
 function DotGrid() {
+  const patternId = useId()
+
   return (
     <svg
       className="absolute inset-0 h-full w-full opacity-[0.07]"
       aria-hidden
     >
       <defs>
-        <pattern id="dots" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
+        <pattern id={patternId} x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
           <circle cx="1.5" cy="1.5" r="1.2" fill="currentColor" />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#dots)" />
+      <rect width="100%" height="100%" fill={`url(#${patternId})`} />
     </svg>
   )
 }
 
-export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeCardProps) {
+export default function CommitteeCard({ committee }: CommitteeCardProps) {
   const [flipped, setFlipped] = useState(false)
   const [mobileFlipped, setMobileFlipped] = useState(false)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
   const hasBannerImage = Boolean(committee.imageUrl)
-
-  const animDelay = `${revealIndex * 80}ms`
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)")
@@ -80,7 +78,10 @@ export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeC
   const MobileCard = (
     <article
       className="md:hidden cursor-pointer"
-      style={{ animationDelay: animDelay, perspective: "1000px" }}
+      style={{ perspective: "1000px" }}
+      role="button"
+      aria-pressed={isMobileFlipActive}
+      aria-label={`${committee.name} committee details`}
       tabIndex={0}
       onClick={() => setMobileFlipped((prev) => !prev)}
       onKeyDown={(event) => {
@@ -143,7 +144,7 @@ export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeC
             <div className="flex flex-wrap gap-1.5">
               {committee.leads.map((lead) => (
                 <span
-                  key={`${committee.id}-${lead}`}
+                  key={lead}
                   className="rounded-full border border-[#4a9e3f]/35 bg-[#1a3d16]/60 px-2.5 py-0.5 text-[11px] font-medium text-[#7ec87a]"
                 >
                   {lead}
@@ -159,144 +160,144 @@ export default function CommitteeCard({ committee, revealIndex = 0 }: CommitteeC
 
   // ─── Desktop Card ─────────────────────────────────────────────────────────
   const DesktopCard = (
-  <article
-    ref={cardRef}
-    tabIndex={0}
-    onMouseEnter={() => {
-      if (!isSmallScreen) setFlipped(true)
-    }}
-    onMouseLeave={() => {
-      if (!isSmallScreen) setFlipped(false)
-    }}
-    onFocus={() => {
-      if (!isSmallScreen) setFlipped(true)
-    }}
-    onBlur={() => {
-      if (!isSmallScreen) setFlipped(false)
-    }}
-    onClick={() => {
-      if (isSmallScreen) setFlipped((f) => !f)
-    }}
-    onKeyDown={(e) => {
-      if (isSmallScreen && (e.key === "Enter" || e.key === " ")) setFlipped((f) => !f)
-    }}
-    className="hidden md:block cursor-pointer"
-    style={{
-      perspective: "1100px",
-      height: "380px",
-    }}
-  >
-    <div
-      className="relative w-full h-full transition-transform duration-700"
+    <article
+      tabIndex={0}
+      role="button"
+      aria-pressed={flipped}
+      aria-label={`${committee.name} committee details`}
+      onMouseEnter={() => {
+        if (!isSmallScreen) setFlipped(true)
+      }}
+      onMouseLeave={() => {
+        if (!isSmallScreen) setFlipped(false)
+      }}
+      onClick={() => setFlipped((f) => !f)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          setFlipped((f) => !f)
+        } else if (event.key === " ") {
+          event.preventDefault()
+          setFlipped((f) => !f)
+        }
+      }}
+      className="hidden md:block cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2d5a27]/50"
       style={{
-        transformStyle: "preserve-3d",
-        transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+        perspective: "1100px",
+        height: "380px",
       }}
     >
-      {/* ───────── FRONT ───────── */}
       <div
-        className="absolute inset-0 rounded-[16px] overflow-hidden border border-black/10 bg-white flex flex-col"
-        style={{ backfaceVisibility: "hidden" }}
-      >
-        {/* IMAGE */}
-        <div className="relative aspect-[5/3] bg-[#e8f0e4]">
-          {hasBannerImage ? (
-            <Image
-              src={committee.imageUrl!}
-              alt={committee.name}
-              fill
-              className="object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center relative bg-gradient-to-br from-[#ddecd6] via-[#c8dfc0] to-[#b8d4ae]">
-              {/* blooms */}
-              <div className="absolute w-[120px] h-[120px] rounded-full bg-[radial-gradient(circle,rgba(120,180,90,0.25)_0%,transparent_70%)] top-[-20px] right-[-10px]" />
-              <div className="absolute w-[90px] h-[90px] rounded-full bg-[radial-gradient(circle,rgba(80,150,60,0.2)_0%,transparent_70%)] bottom-[-15px] left-[10px]" />
-
-              <LeafDecor className="opacity-20 text-[#3d8533] w-16 h-24" />
-            </div>
-          )}
-        </div>
-
-        {/* BODY */}
-        <div className="p-4 flex flex-col flex-1">
-          <p className="text-[9.5px] font-semibold tracking-[0.2em] uppercase text-[#5a8c4a] mb-1">
-            {committee.focus}
-          </p>
-
-          <h3 className="font-serif text-[1.15rem] font-bold text-[#1a2e16] leading-tight mb-2">
-            {committee.name}
-          </h3>
-
-          {/* leads */}
-          <div className="flex flex-wrap gap-1 mt-auto">
-            {committee.leads.slice(0, 3).map((lead) => (
-              <span
-                key={lead}
-                className="border border-[#5a8c4a]/30 bg-[#5a8c4a]/10 px-2 py-[2px] rounded-full text-[10px] text-[#3d6b2e]"
-              >
-                {lead}
-              </span>
-            ))}
-          </div>
-
-          <p className="text-[9px] text-[#9ab890] mt-2 tracking-wide">
-            click to learn more ↺
-          </p>
-        </div>
-      </div>
-
-      {/* ───────── BACK ───────── */}
-      <div
-        className="absolute inset-0 rounded-[16px] overflow-hidden border border-[#4a823c]/20 bg-[#f7f9f5] flex flex-col"
+        className="relative w-full h-full transition-transform duration-700"
         style={{
-          backfaceVisibility: "hidden",
-          transform: "rotateY(180deg)",
+          transformStyle: "preserve-3d",
+          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-        {/* top strip */}
-        <div className="h-[6px] bg-gradient-to-r from-[#7ec87a] via-[#4a9e3f] to-[#2d6e28]" />
+        {/* ───────── FRONT ───────── */}
+        <div
+          className="absolute inset-0 rounded-[16px] overflow-hidden border border-black/10 bg-white flex flex-col"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          {/* IMAGE */}
+          <div className="relative aspect-[5/3] bg-[#e8f0e4]">
+            {hasBannerImage ? (
+              <Image
+                src={committee.imageUrl!}
+                alt={`${committee.name} activity`}
+                fill
+                sizes="(min-width: 1280px) 320px, (min-width: 1024px) 300px, (min-width: 768px) 260px, 100vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center relative bg-gradient-to-br from-[#ddecd6] via-[#c8dfc0] to-[#b8d4ae]">
+                {/* blooms */}
+                <div className="absolute w-[120px] h-[120px] rounded-full bg-[radial-gradient(circle,rgba(120,180,90,0.25)_0%,transparent_70%)] top-[-20px] right-[-10px]" />
+                <div className="absolute w-[90px] h-[90px] rounded-full bg-[radial-gradient(circle,rgba(80,150,60,0.2)_0%,transparent_70%)] bottom-[-15px] left-[10px]" />
 
-        {/* dotted bg */}
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(90,140,74,0.1)_1px,transparent_1px)] bg-[length:16px_16px]" />
+                <LeafDecor className="opacity-20 text-[#3d8533] w-16 h-24" />
+              </div>
+            )}
+          </div>
 
-        <div className="p-4 flex flex-col flex-1 relative">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#5a8c4a] mb-1">
-            What We Do
-          </p>
+          {/* BODY */}
+          <div className="p-4 flex flex-col flex-1">
+            <p className="text-[9.5px] font-semibold tracking-[0.2em] uppercase text-[#5a8c4a] mb-1">
+              {committee.focus}
+            </p>
 
-          <h3 className="font-serif text-[1.1rem] font-bold text-[#1a2e16]">
-            {committee.name}
-          </h3>
+            <h3 className="font-serif text-[1.15rem] font-bold text-[#1a2e16] leading-tight mb-2">
+              {committee.name}
+            </h3>
 
-          <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#8aad7e] mb-2">
-            {committee.focus}
-          </p>
+            {/* leads */}
+            <div className="flex flex-wrap gap-1 mt-auto">
+              {committee.leads.slice(0, 3).map((lead) => (
+                <span
+                  key={lead}
+                  className="border border-[#5a8c4a]/30 bg-[#5a8c4a]/10 px-2 py-[2px] rounded-full text-[10px] text-[#3d6b2e]"
+                >
+                  {lead}
+                </span>
+              ))}
+            </div>
 
-          <div className="h-[1px] bg-[#5a8c4a]/20 mb-2" />
+            <p className="text-[9px] text-[#9ab890] mt-2 tracking-wide">
+              click to learn more ↺
+            </p>
+          </div>
+        </div>
 
-          <p className="text-[12.5px] leading-[1.75] text-[#4a5e44] flex-1 overflow-y-auto">
-            {committee.description}
-          </p>
+        {/* ───────── BACK ───────── */}
+        <div
+          className="absolute inset-0 rounded-[16px] overflow-hidden border border-[#4a823c]/20 bg-[#f7f9f5] flex flex-col"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+          }}
+        >
+          {/* top strip */}
+          <div className="h-[6px] bg-gradient-to-r from-[#7ec87a] via-[#4a9e3f] to-[#2d6e28]" />
 
-          <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#5a8c4a] mt-3 mb-1">
-            Leads
-          </p>
+          {/* dotted bg */}
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,rgba(90,140,74,0.1)_1px,transparent_1px)] bg-[length:16px_16px]" />
 
-          <div className="flex flex-wrap gap-1">
-            {committee.leads.map((lead) => (
-              <span
-                key={lead}
-                className="border border-[#4a9e3f]/35 bg-[#4a9e3f]/10 px-2 py-[3px] rounded-full text-[11px] text-[#2d6e28]"
-              >
-                {lead}
-              </span>
-            ))}
+          <div className="p-4 flex flex-col flex-1 relative">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#5a8c4a] mb-1">
+              What We Do
+            </p>
+
+            <h3 className="font-serif text-[1.1rem] font-bold text-[#1a2e16]">
+              {committee.name}
+            </h3>
+
+            <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#8aad7e] mb-2">
+              {committee.focus}
+            </p>
+
+            <div className="h-[1px] bg-[#5a8c4a]/20 mb-2" />
+
+            <p className="text-[12.5px] leading-[1.75] text-[#4a5e44] flex-1 overflow-y-auto">
+              {committee.description}
+            </p>
+
+            <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#5a8c4a] mt-3 mb-1">
+              Leads
+            </p>
+
+            <div className="flex flex-wrap gap-1">
+              {committee.leads.map((lead) => (
+                <span
+                  key={lead}
+                  className="border border-[#4a9e3f]/35 bg-[#4a9e3f]/10 px-2 py-[3px] rounded-full text-[11px] text-[#2d6e28]"
+                >
+                  {lead}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </article>
+    </article>
   )
 
   return (
