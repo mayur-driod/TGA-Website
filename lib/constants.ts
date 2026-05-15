@@ -9,6 +9,8 @@ import type {
 
 export const SITE_NAME = "The Green Alliance"
 export const SITE_TAGLINE = "A student led initiative to raise awareness"
+export const GLOBE_READY_EVENT = "tga:globe-ready"
+export const SPLASH_DONE_EVENT = "tga:splash-done"
 export const SITE_URL = "https://thegreenalliancervuniversity.vercel.app/"
 export const CONTACT_EMAIL = "club_thegreenalliance@rvu.edu.in"
 export const RVU_EMAIL_DOMAIN = "@rvu.edu.in"

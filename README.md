@@ -11,9 +11,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
-[🌐 Live Site](#) · [📸 Screenshots](#screenshots) · [🐛 Report a Bug](issues) · [✨ Request a Feature](issues)
+[🌐 Live Site](https://thegreenalliancervuniversity.vercel.app/) · [📸 Screenshots](#screenshots) · [🐛 Report a Bug](https://github.com/mayur-driod/TGA-Website/issues) · [✨ Request a Feature](https://github.com/mayur-driod/TGA-Website/issues)
 
 <img width="1470" height="883" alt="Screenshot 2026-04-27 at 10 38 48 AM" src="https://github.com/user-attachments/assets/abb4610e-1083-4460-9cb8-52bb0807d1d2" />
 
@@ -92,7 +91,7 @@ Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (v18 or above)
 - [npm](https://www.npmjs.com/) or [pnpm](https://pnpm.io/)
-- A running PostgreSQL (or your configured) database
+- A running PostgreSQL database (local install or Docker)
 - A Redis instance (local or cloud)
 
 ### 1. Clone the repository
@@ -213,14 +212,6 @@ This is currently a solo project, but contributions, suggestions, and feedback a
 5. Open a Pull Request
 
 Please make sure your code follows the existing style and passes all checks.
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
 
 ## 💚 Acknowledgements
 

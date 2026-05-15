@@ -1,0 +1,206 @@
+The Green Alliance Source-Available License (TGASL)
+
+Copyright © 2026 Mayur K Setty
+(on behalf of The Green Alliance RV University, Bengaluru)
+
+All rights reserved.
+
+===============================================================================
+1. PURPOSE
+===============================================================================
+
+This project is made publicly accessible for educational, collaborative,
+academic, organizational, and learning purposes.
+
+The source code may be viewed and contributed to under the terms of this
+license; however, this project is NOT open source and no rights are granted
+for unrestricted reuse, redistribution, commercialization, replication,
+or deployment outside the permissions explicitly stated below.
+
+===============================================================================
+2. PERMITTED USE
+===============================================================================
+
+Permission is granted to students, contributors, members, and authorized
+participants of The Green Alliance RV University to:
+
+- view and study the source code
+- learn from the implementation
+- contribute improvements through approved contribution channels
+- participate in development and maintenance
+- use the software internally for educational or organizational purposes
+- fork the repository strictly for personal learning or contribution purposes
+
+All contributions remain subject to maintainer review and approval.
+
+===============================================================================
+3. RESTRICTIONS
+===============================================================================
+
+Without prior written permission from the official maintainers and/or
+The Green Alliance RV University, no individual, group, institution,
+organization, or third party may:
+
+- commercially use this software
+- redistribute this software
+- sublicense this software
+- publicly host or deploy modified versions
+- create derivative organizational platforms from this project
+- copy or reproduce substantial portions of the implementation
+- imitate or replicate the platform architecture
+- reproduce the workflows, systems, or organizational structures
+- use the project for competing or similar organizational initiatives
+- remove or alter ownership, attribution, or legal notices
+- falsely claim affiliation with The Green Alliance RV University
+- use the project in a way that misrepresents the organization
+- create clones, replicas, or substantially similar platforms
+- extract proprietary systems or implementation patterns for external use
+
+These restrictions apply to all parts of the project, including but not
+limited to:
+
+- source code
+- frontend architecture
+- backend architecture
+- APIs
+- database structures
+- workflows
+- UI/UX systems
+- layouts
+- styling implementations
+- design systems
+- interaction patterns
+- organizational systems
+- internal tools
+- media assets
+- photographs
+- graphics
+- written content
+- event materials
+- documentation
+- branding and identity assets
+
+===============================================================================
+4. BRANDING AND ORGANIZATIONAL IDENTITY
+===============================================================================
+
+All names, trademarks, logos, visual identities, organizational branding,
+design systems, frontend experiences, layouts, interface styles,
+interactive implementations, and club-specific systems associated with
+The Green Alliance RV University are proprietary intellectual property.
+
+No permission is granted to use, reproduce, imitate, modify, distribute,
+display, or exploit these assets without explicit written authorization.
+
+No part of this project may be used to create, support, promote,
+represent, or operate any platform, initiative, service, organization,
+or community that imitates, resembles, competes with, or misrepresents
+The Green Alliance RV University or its official digital presence.
+
+===============================================================================
+5. CONTRIBUTIONS
+===============================================================================
+
+By contributing to this repository, contributors acknowledge and agree that:
+
+- contributions may be modified, rejected, removed, or incorporated
+  into the project at maintainer discretion
+- contributions become part of the project governed under this license
+- contributors do not obtain ownership, governance authority,
+  licensing control, or decision-making rights over the project
+- maintainers retain final authority regarding integration,
+  modification, and use of submitted contributions
+
+Contributors are responsible for ensuring that submitted work does not
+infringe upon third-party rights or licenses.
+
+===============================================================================
+6. PROJECT GOVERNANCE AND MAINTAINER AUTHORITY
+===============================================================================
+
+This project is owned, governed, and maintained by
+The Green Alliance RV University and its authorized maintainers.
+
+All decisions made by the maintainers regarding:
+
+- project direction
+- repository governance
+- contribution policies
+- feature acceptance or rejection
+- licensing interpretations
+- code ownership
+- moderation
+- branding usage
+- deployment permissions
+- organizational representation
+- access control
+- community conduct
+- and all other project-related matters
+
+shall be considered final and binding.
+
+The maintainers reserve the right to:
+
+- modify, update, replace, or revoke any policy, guideline,
+  permission, restriction, or contribution rule at any time
+  without prior notice
+- reject or remove contributions for any reason
+- restrict or revoke contributor or collaborator access
+- enforce additional organizational or technical requirements
+- redefine permitted and prohibited uses of the project
+- request removal of unauthorized deployments, reproductions,
+  forks, or derivative implementations
+
+Continued use of, contribution to, or interaction with this repository
+constitutes acceptance of the most current version of these terms.
+
+No contributor, fork, organization, or external party may claim
+ownership, governance authority, or decision-making rights over this
+project unless explicitly authorized in writing by the official
+maintainers.
+
+===============================================================================
+7. CONFIDENTIALITY AND DATA
+===============================================================================
+
+All internal records, user data, member information, submissions,
+organizational resources, administrative content, and database materials
+associated with this project remain confidential and are the exclusive
+property of The Green Alliance RV University.
+
+No rights are granted to access, distribute, reproduce, expose,
+commercialize, or exploit such information.
+
+===============================================================================
+8. TERMINATION
+===============================================================================
+
+Any violation of this license automatically terminates all permissions
+granted under it.
+
+Upon termination, the violating party must immediately cease all use,
+distribution, deployment, reproduction, and possession of the project
+and any derivative materials where legally enforceable.
+
+===============================================================================
+9. DISCLAIMER OF WARRANTY
+===============================================================================
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+IN NO EVENT SHALL THE AUTHORS, MAINTAINERS, CONTRIBUTORS,
+OR THE GREEN ALLIANCE RV UNIVERSITY BE LIABLE FOR ANY CLAIM,
+DAMAGES, LIABILITY, OR OTHER LEGAL ACTION ARISING FROM THE USE,
+MISUSE, OR DISTRIBUTION OF THIS SOFTWARE.
+
+===============================================================================
+10. CONTACT
+===============================================================================
+
+For permissions, licensing inquiries, organizational usage requests,
+or commercial discussions, contact the official maintainers of
+The Green Alliance RV University.
+
+SPDX-License-Identifier: LicenseRef-TGASL
