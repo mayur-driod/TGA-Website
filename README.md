@@ -213,14 +213,6 @@ This is currently a solo project, but contributions, suggestions, and feedback a
 
 Please make sure your code follows the existing style and passes all checks.
 
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
 ## 💚 Acknowledgements
 
 - [iNaturalist](https://www.inaturalist.org/) — community biodiversity data
