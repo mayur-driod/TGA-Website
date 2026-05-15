@@ -11,7 +11,6 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
 [🌐 Live Site](https://thegreenalliancervuniversity.vercel.app/) · [📸 Screenshots](#screenshots) · [🐛 Report a Bug](https://github.com/mayur-driod/TGA-Website/issues) · [✨ Request a Feature](https://github.com/mayur-driod/TGA-Website/issues)
 
