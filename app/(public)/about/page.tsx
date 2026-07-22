@@ -18,6 +18,7 @@ import PageHeader from "@/components/common/PageHeader"
 import SectionLabel from "@/components/common/SectionLabel"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 
 /**
  * ---------------------------------------------------------------------------
@@ -163,7 +164,13 @@ function ImageModal({
         onClick={onClose}
       />
       <div className="relative z-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
-        <img src={src} alt={alt} className="max-h-[80vh] w-full object-contain" />
+        <Image
+          src={src}
+          alt={alt}
+          width={1600}
+          height={1200}
+          className="max-h-[80vh] w-full object-contain"
+        />
         {caption ? (
           <div className="border-t border-border px-4 py-3 text-sm text-muted-foreground">
             {caption}
@@ -248,9 +255,11 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="overflow-hidden rounded-2xl border border-forest-100/70 bg-muted/40 shadow-sm transition-all duration-300 hover:shadow-md">
-              <img
+              <Image
                 src="/assets/photos/walking.jpeg"
                 alt="Our story — Green Alliance origins"
+                width={500}
+                height={625}
                 className="aspect-4/5 w-full object-cover object-center"
               />
             </div>
@@ -348,8 +357,10 @@ export default function AboutPage() {
                 className="group overflow-hidden rounded-xl border border-border/60 bg-card/70 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm"
               >
                 <div className="aspect-square overflow-hidden">
-                  <img
+                  <Image
                     src={item.src}
+                    width={1000}
+                    height={1000}
                     className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
                     alt={item.caption ?? "Add a photo"}
                   />
