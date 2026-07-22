@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
   Binoculars,
@@ -93,12 +96,12 @@ const MILESTONES = [
 ] as const
 
 const GALLERY_ITEMS = [
-  { caption: "Campus bird walk", src: undefined as string | undefined },
-  { caption: "Clean-up drive", src: undefined as string | undefined },
-  { caption: "Species spotting", src: undefined as string | undefined },
-  { caption: undefined, src: undefined as string | undefined },
-  { caption: "Awareness stall", src: undefined as string | undefined },
-  { caption: undefined, src: undefined as string | undefined },
+  { caption: "Campus bird walk", src:"/assets/photos/garbageCollection.jpg" },
+  { caption: "Clean-up drive", src: "/assets/photos/UniPic.jpg" },
+  { caption: "Species spotting", src: "/assets/photos/pointing.jpeg" },
+  { caption: "Our story — Green Alliance origins", src: "/assets/photos/Hands Together.jpg" },
+  { caption: "Awareness stall", src: "/assets/photos/Santhe.jpeg" },
+  { caption: "Community event", src: "/assets/photos/Photo GBBC 2026 RVU.jpg" },
 ] as const
 
 const STATS = [
@@ -125,7 +128,62 @@ function ImagePlaceholder({
   )
 }
 
+function ImageModal({
+  open,
+  src,
+  alt,
+  caption,
+  onClose,
+}: {
+  open: boolean
+  src: string | null
+  alt: string
+  caption?: string | null
+  onClose: () => void
+}) {
+  useEffect(() => {
+    if (!open) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose()
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [open, onClose])
+
+  if (!open || !src) return null
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        aria-label="Close image preview"
+        className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      <div className="relative z-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+        <img src={src} alt={alt} className="max-h-[80vh] w-full object-contain" />
+        {caption ? (
+          <div className="border-t border-border px-4 py-3 text-sm text-muted-foreground">
+            {caption}
+          </div>
+        ) : null}
+      </div>
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute right-4 top-4 z-20 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground shadow-sm"
+      >
+        Close
+      </button>
+    </div>
+  )
+}
+
 export default function AboutPage() {
+  const [selectedImage, setSelectedImage] = useState<(typeof GALLERY_ITEMS)[number] | null>(null)
+
   return (
     <main className="relative overflow-hidden pb-4">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -189,7 +247,13 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <ImagePlaceholder className="aspect-[4/5] w-full" label="Add a story photo" />
+            <div className="overflow-hidden rounded-2xl border border-forest-100/70 bg-muted/40 shadow-sm transition-all duration-300 hover:shadow-md">
+              <img
+                src="/assets/photos/walking.jpeg"
+                alt="Our story — Green Alliance origins"
+                className="aspect-4/5 w-full object-cover object-center"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -275,21 +339,39 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
             {GALLERY_ITEMS.map((item, index) => (
-              <div key={index} className="group">
-                <ImagePlaceholder
-                  className="aspect-square w-full transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-sm"
-                  label={item.caption ?? "Add a photo"}
-                />
+              <button
+                key={index}
+                type="button"
+                onClick={() => setSelectedImage(item)}
+                className="group overflow-hidden rounded-xl border border-border/60 bg-card/70 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm"
+              >
+                <div className="aspect-square overflow-hidden">
+                  <img
+                    src={item.src}
+                    className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
+                    alt={item.caption ?? "Add a photo"}
+                  />
+                </div>
                 {item.caption ? (
-                  <p className="mt-2 text-xs text-muted-foreground">{item.caption}</p>
+                  <figcaption className="px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+                    {item.caption}
+                  </figcaption>
                 ) : null}
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </section>
+
+      <ImageModal
+        open={Boolean(selectedImage)}
+        src={selectedImage?.src ?? null}
+        alt={selectedImage?.caption ?? "Gallery image preview"}
+        caption={selectedImage?.caption}
+        onClose={() => setSelectedImage(null)}
+      />
 
       {/* Stats strip */}
       <section className="relative z-10 px-4 py-6 md:px-8 lg:px-12">
